@@ -8,13 +8,13 @@ import Container from "../component/Container";
 const JoinPage = () => {
   const navigate = useNavigate();
   const onHeaderButtonClick = () => {
-    navigate('/join')
+    navigate('/login')
   }
 
   return (
     <div>
       <Header
-        child={<Button word="회원가입" onClick={onHeaderButtonClick}/>}
+        child={<Button word="로그인" onClick={onHeaderButtonClick}/>}
         />
       <Container maxWidth={"864px"}>
         <Join />
