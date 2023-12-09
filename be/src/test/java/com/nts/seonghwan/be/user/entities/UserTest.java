@@ -1,8 +1,8 @@
 package com.nts.seonghwan.be.user.entities;
 
+import com.nts.seonghwan.be.user.exception.InvalidAuthenticationException;
 import com.nts.seonghwan.be.user.service.BcryptPasswordEncoder;
 import com.nts.seonghwan.be.user.service.PasswordEncoder;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,8 +12,7 @@ class UserTest {
     PasswordEncoder passwordEncoder = new BcryptPasswordEncoder();
 
     @Test
-    @DisplayName("PassswordEncoder로 비밀번호 암호화할 수 있다.")
-    void encryptPassword() {
+    void PassswordEncoder로_비밀번호_암호화할_수_있다() {
         // given
         User user = User.builder()
                 .email("abc123@abc.com")
