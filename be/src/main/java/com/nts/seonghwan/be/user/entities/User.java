@@ -1,10 +1,14 @@
 package com.nts.seonghwan.be.user.entities;
 
-import lombok.*;
+import com.nts.seonghwan.be.user.service.PasswordEncoder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
@@ -13,7 +17,6 @@ import static lombok.AccessLevel.*;
 @NoArgsConstructor(access = PROTECTED)
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -21,4 +24,8 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    public void encryptPassword(PasswordEncoder encoder){
+        this.password = encoder.encode(password);
+    }
 }
