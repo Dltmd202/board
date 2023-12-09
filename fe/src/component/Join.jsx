@@ -15,11 +15,6 @@ const Join = () => {
   const [activeSubmitButton, setActiveSubmitButton] = useState(true);
 
   useEffect(() => {
-  }, [activeSubmitButton])
-
-  useEffect(() => {
-    console.log('activeSubmitButton');
-    console.log(activeSubmitButton);
     setActiveSubmitButton(validatedEmail && validPassword && validRepeatedPassword || false);
   }, [validatedEmail, validPassword, validRepeatedPassword]);
 
