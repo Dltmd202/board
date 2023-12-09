@@ -1,5 +1,7 @@
 package com.nts.seonghwan.be.service;
 
+import com.nts.seonghwan.be.user.entities.User;
+import com.nts.seonghwan.be.user.service.PasswordEncoder;
 import com.nts.seonghwan.be.user.service.UserService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +21,18 @@ public class ServiceTest {
 
     @Autowired
     public EntityManager em;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public User getDefaultUser(String email, String password){
+        User prevUser = User.builder()
+                .email(email)
+                .password(password)
+                .build();
+        prevUser.encryptPassword(passwordEncoder);
+        em.persist(prevUser);
+        return prevUser;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.nts.seonghwan.be.user.entities;
 
+import com.nts.seonghwan.be.common.error.exception.BusinessException;
 import com.nts.seonghwan.be.user.service.PasswordEncoder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,10 @@ public class User {
 
     public void encryptPassword(PasswordEncoder encoder){
         this.password = encoder.encode(password);
+    }
+
+    public void login(PasswordEncoder passwordEncoder, String password, BusinessException exception) {
+        if(!passwordEncoder.matches(password, this.password))
+            throw exception;
     }
 }
