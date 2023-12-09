@@ -1,15 +1,24 @@
+import React from "react";
+import Header from "../component/Header";
+import {useNavigate} from "react-router-dom";
+import Button from "../component/Button";
+import Join from "../component/Join";
+import Container from "../component/Container";
+
 const JoinPage = () => {
+  const navigate = useNavigate();
+  const onHeaderButtonClick = () => {
+    navigate('/join')
+  }
+
   return (
     <div>
-      <h1>회원가입</h1>
-      <div>
-        <p>아이디</p>
-        <input/>
-      </div>
-      <div>
-        <p>비밀번호</p>
-        <input/>
-      </div>
+      <Header
+        child={<Button word="회원가입" onClick={onHeaderButtonClick}/>}
+        />
+      <Container maxWidth={"864px"}>
+        <Join />
+      </Container>
     </div>
   );
 }
