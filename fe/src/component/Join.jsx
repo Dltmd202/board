@@ -12,7 +12,7 @@ const Join = () => {
   const [emailFailMessage, setEmailFailMessage] = useState('');
   const [validPassword, setValidPassword] = useState(null);
   const [validRepeatedPassword, setValidRepeatedPassword] = useState(null);
-  const [activeSubmitButton, setActiveSubmitButton] = useState(true);
+  const [activeSubmitButton, setActiveSubmitButton] = useState(false);
 
   useEffect(() => {
     setActiveSubmitButton(validatedEmail && validPassword && validRepeatedPassword || false);
