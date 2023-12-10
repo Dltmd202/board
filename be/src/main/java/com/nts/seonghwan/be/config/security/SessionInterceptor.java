@@ -2,6 +2,7 @@ package com.nts.seonghwan.be.config.security;
 
 import com.nts.seonghwan.be.common.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if(request.getMethod().equals(HttpMethod.OPTIONS.toString())) return true;
+
         Long authenticatedUserId = (Long) sessionManager.getSession(request);
 
         if(Objects.isNull(authenticatedUserId)) {
