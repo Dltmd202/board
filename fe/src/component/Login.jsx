@@ -1,10 +1,46 @@
-import React from "react";
+import React, {useState} from "react";
 import Input from "./Input";
 import Button from "./Button";
 import {Link, useNavigate} from "react-router-dom";
+import {isEmailFormat} from "../common/utils/email";
+import {userApi} from "../api/user";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [signin, setSignin] = useState({});
+  const [validatetdEmail, setValidatetdEmail] = useState(null);
+
+  const onEmailChange = (e) => {
+    if(isEmailFormat(signin.email)) setValidatetdEmail(true);
+    else setValidatetdEmail(false);
+
+    setSignin({
+      ...signin,
+      email: e.target.value,
+    });
+  }
+
+  const onPasswordChange = (e) => {
+    setSignin({
+      ...signin,
+      password: e.target.value,
+    });
+  }
+
+  const submitSignup = async () => {
+    try {
+      const { data } = await userApi.signin(signin);
+      localStorage.setItem("TOKEN", data.response.sessionId);
+      alert('로그인에 성공햇습니다.');
+      navigate('/');
+    } catch (e){
+      alert(e.data.error.message);
+      setSignin({
+        email: '',
+        password: '',
+      })
+    }
+  }
 
   return (
     <div>
@@ -16,7 +52,11 @@ const Login = () => {
           <div className="col-12">
             <Input
               label="아이디"
-              type="text"/>
+              type="text"
+              onInput={onEmailChange}
+              value={signin.email}
+              status={validatetdEmail}
+            />
           </div>
         </div>
         <div className="row">
@@ -24,6 +64,8 @@ const Login = () => {
             <Input
               label="비밀번호"
               type="password"
+              onInput={onPasswordChange}
+              value={signin.password}
             />
           </div>
         </div>
@@ -31,6 +73,7 @@ const Login = () => {
           <Button
             word="로그인"
             className={"py-2"}
+            onClick={submitSignup}
           />
         </div>
       </div>
