@@ -3,6 +3,7 @@ import Input from "./Input";
 import Button from "./Button";
 import {userApi} from "../api/user";
 import {useNavigate} from "react-router-dom";
+import {isEmailFormat} from "../common/utils/email";
 
 const Join = () => {
   const navigate = useNavigate();
@@ -11,14 +12,9 @@ const Join = () => {
   const [emailFailMessage, setEmailFailMessage] = useState('');
   const [validPassword, setValidPassword] = useState(null);
   const [validRepeatedPassword, setValidRepeatedPassword] = useState(null);
-  const [activeSubmitButton, setActiveSubmitButton] = useState(true);
+  const [activeSubmitButton, setActiveSubmitButton] = useState(false);
 
   useEffect(() => {
-  }, [activeSubmitButton])
-
-  useEffect(() => {
-    console.log('activeSubmitButton');
-    console.log(activeSubmitButton);
     setActiveSubmitButton(validatedEmail && validPassword && validRepeatedPassword || false);
   }, [validatedEmail, validPassword, validRepeatedPassword]);
 
@@ -29,11 +25,6 @@ const Join = () => {
   useEffect(() => {
     if(signup.password) setValidPassword(signup.password.length >= 8);
   }, [signup.password]);
-
-  const isEmailFormat = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
 
   const validateEmail = async () => {
     if(!isEmailFormat(signup.email)) {
