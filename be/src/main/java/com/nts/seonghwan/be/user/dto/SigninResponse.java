@@ -3,6 +3,7 @@ package com.nts.seonghwan.be.user.dto;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -11,6 +12,9 @@ import static lombok.AccessLevel.PROTECTED;
 public class SigninResponse {
     private Long id;
     private String email;
+
+    @Setter
+    private String sessionId;
 
     public SigninResponse(Long id, String email) {
         this.id = id;
