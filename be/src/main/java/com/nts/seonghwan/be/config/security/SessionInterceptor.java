@@ -1,7 +1,8 @@
 package com.nts.seonghwan.be.config.security;
 
-import com.nts.seonghwan.be.common.constants.SessionConstants;
 import com.nts.seonghwan.be.common.utils.ApiUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +11,15 @@ import java.util.Objects;
 
 import static com.nts.seonghwan.be.common.error.exception.ErrorCode.NO_AUTHENTICATION;
 
+@RequiredArgsConstructor
 public class SessionInterceptor implements HandlerInterceptor {
+    private final SimpleSessionManager sessionManager;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Long authenticatedUserId = (Long) request.getSession().getAttribute(SessionConstants.LOGIN_USER);
+        if(request.getMethod().equals(HttpMethod.OPTIONS.toString())) return true;
+
+        Long authenticatedUserId = (Long) sessionManager.getSession(request);
 
         if(Objects.isNull(authenticatedUserId)) {
             response.setStatus(NO_AUTHENTICATION.getStatus().value());

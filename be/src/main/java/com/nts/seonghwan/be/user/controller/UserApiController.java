@@ -2,6 +2,7 @@ package com.nts.seonghwan.be.user.controller;
 
 import com.nts.seonghwan.be.common.utils.ApiUtils;
 import com.nts.seonghwan.be.common.utils.ApiUtils.ApiResult;
+import com.nts.seonghwan.be.config.security.SimpleSessionManager;
 import com.nts.seonghwan.be.user.dto.SigninRequest;
 import com.nts.seonghwan.be.user.dto.SigninResponse;
 import com.nts.seonghwan.be.user.dto.SignupRequest;
@@ -13,14 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import static com.nts.seonghwan.be.common.constants.SessionConstants.LOGIN_USER;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserApiController {
+    private final SimpleSessionManager simpleSessionManager;
     private final UserService userService;
 
     @PostMapping
@@ -43,15 +41,14 @@ public class UserApiController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResult<SigninResponse>> login(
-            HttpServletRequest request,
             @Validated @RequestBody SigninRequest signinRequest
     ){
         SigninResponse login = userService.login(signinRequest);
-        request.getSession().setAttribute(LOGIN_USER, login.getId());
+        String sessionId = simpleSessionManager.createSession(login.getId());
+        login.setSessionId(sessionId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiUtils.success(login));
     }
-
 }
