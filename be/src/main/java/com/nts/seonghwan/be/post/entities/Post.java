@@ -1,5 +1,6 @@
 package com.nts.seonghwan.be.post.entities;
 
+import com.nts.seonghwan.be.common.service.UUIDHolder;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,4 +32,8 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void grantPostId(UUIDHolder uuidHolder){
+        this.postId = uuidHolder.uuid();
+    }
 }
