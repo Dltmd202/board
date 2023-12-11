@@ -11,6 +11,9 @@ public enum ErrorCode {
     INVALID_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "로그인에 실패했습니다."),
     NO_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
 
+     // 게시글 관련 에러
+    INVALID_WRITER(HttpStatus.BAD_REQUEST, "작성자 정보를 확인해주세요."),
+
     // 서버 내부 에러
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에 오류가 발생했습니다.");
 
