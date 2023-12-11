@@ -9,6 +9,5 @@ create table post(
     title varchar(255) not null,
     content varchar(255) not null,
     user_id bigint not null,
-    post_id varchar(255) not null unique,
     foreign key (user_id) references user(id)
 );
