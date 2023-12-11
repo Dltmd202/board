@@ -10,5 +10,6 @@ create table post(
     content varchar(255) not null,
     user_id bigint not null,
     post_id varchar(255) not null unique,
+    created_at datetime  not null,
     foreign key (user_id) references user(id)
 );
