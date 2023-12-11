@@ -2,13 +2,9 @@ package com.nts.seonghwan.be.user.dto;
 
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static lombok.AccessLevel.PROTECTED;
-
 @Getter
-@NoArgsConstructor(access = PROTECTED)
 public class SigninResponse {
     private Long id;
     private String email;
