@@ -10,6 +10,10 @@ const PostList = () => {
     postId: 'ea642987-0e39-4cfc-9d4f-f8356b0e8658',
   }
 
+  const handlePostItemClick = (postId) => {
+    navigate(`/post/${postId}`);
+  }
+
   return (
     <div>
       <h1 className="mt-5 mb-2">게시판</h1>
@@ -25,17 +29,17 @@ const PostList = () => {
         </tr>
         </thead>
         <tbody>
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
-        <PostListItem post={defaultPost} />
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
         </tbody>
       </table>
 
@@ -56,8 +60,13 @@ const PostList = () => {
 
 const PostListItem = ({
                         post,
+                        onItemClick
 }) => {
   const {title, user, createdAt, postId} = post;
+
+  const onClick = () => {
+    onItemClick(postId);
+  }
 
   const truncateString = (str, maxLength) => {
     if (str.length > maxLength) {
