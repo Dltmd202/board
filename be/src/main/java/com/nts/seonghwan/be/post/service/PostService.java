@@ -3,12 +3,15 @@ package com.nts.seonghwan.be.post.service;
 import com.nts.seonghwan.be.common.service.UUIDHolder;
 import com.nts.seonghwan.be.post.dto.PostCreateRequest;
 import com.nts.seonghwan.be.post.dto.PostCreateResponse;
+import com.nts.seonghwan.be.post.dto.PostListResponse;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.exception.InvalidWriterException;
 import com.nts.seonghwan.be.post.repository.PostRepository;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,11 @@ public class PostService {
         post.grantPostId(uuidHolder);
         Post savePost = postRepository.save(post);
         return PostCreateResponse.from(savePost);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostListResponse> findPost(Pageable pageable){
+        return postRepository.findAll(pageable).map(PostListResponse::new);
     }
 
     private User getUserById(Long id){
