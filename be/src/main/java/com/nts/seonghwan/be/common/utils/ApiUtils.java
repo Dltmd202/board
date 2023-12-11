@@ -18,20 +18,25 @@ public class ApiUtils {
         return new ApiResult<>(false, null, new ApiError(throwable, status));
     }
 
-    public static ApiResult<?> error(String message, HttpStatus status){
+    public static <T> ApiResult<T> error(T message, HttpStatus status){
         return new ApiResult<>(false, null, new ApiError(message, status));
     }
 
+    public static ApiResult<?> error(HttpStatus status){
+        return new ApiResult<>(false, null, new ApiError(status.getReasonPhrase(), status));
+    }
+
     @Getter
-    public static class ApiError{
-        private final String message;
+    public static class ApiError<T>{
+        private final T message;
         private final int status;
 
         ApiError(Throwable throwable, HttpStatus status){
-            this(throwable.getMessage(), status);
+            this.message = (T) throwable.getMessage();
+            this.status = status.value();
         }
 
-        ApiError(String message, HttpStatus status){
+        ApiError(T message, HttpStatus status){
             this.message = message;
             this.status = status.value();
         }
