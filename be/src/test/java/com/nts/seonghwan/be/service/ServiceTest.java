@@ -1,5 +1,6 @@
 package com.nts.seonghwan.be.service;
 
+import com.nts.seonghwan.be.post.service.PostService;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.service.PasswordEncoder;
 import com.nts.seonghwan.be.user.service.UserService;
@@ -18,6 +19,9 @@ public class ServiceTest {
 
     @Autowired
     public UserService userService;
+
+    @Autowired
+    public PostService postService;
 
     @Autowired
     public EntityManager em;
