@@ -19,9 +19,6 @@ public class CommentCreateRequest {
     @NotBlank(message = "댓글을 입력해주세요.")
     private String content;
 
-    @NotBlank(message = "게시글을 선택해주세요.")
-    private String postId;
-
     public Comment toEntity(User user, Post post){
         return Comment.builder()
                 .user(user)

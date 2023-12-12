@@ -18,10 +18,11 @@ class CommentServiceTest extends ServiceTest {
         // given
         User user = getDefaultUser("abc123@abc.com", "1234");
         Post post = getDefaultPost("제목", "내용", user);
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글~", post.getPostId());
+        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글~");
 
         // when
-        CommentCreateResponse comment = commentService.createComment(commentCreateRequest, user.getId());
+        CommentCreateResponse comment = commentService.createComment(
+                commentCreateRequest, user.getId(), post.getPostId());
 
         // then
         assertThat(comment.getContent()).isEqualTo("댓글~");
@@ -35,11 +36,12 @@ class CommentServiceTest extends ServiceTest {
         // given
         User user = getDefaultUser("abc123@abc.com", "1234");
         Post post = getDefaultPost("제목", "내용", user);
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글~", post.getPostId() + "1");
+        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글~");
 
         // when
         assertThatThrownBy(
-                () -> commentService.createComment(commentCreateRequest, user.getId())
+                () -> commentService.createComment(
+                        commentCreateRequest, user.getId(), post.getPostId() + "1")
         ).isInstanceOf(NotFoundPostException.class);
     }
 
@@ -48,11 +50,11 @@ class CommentServiceTest extends ServiceTest {
         // given
         User user = getDefaultUser("abc123@abc.com", "1234");
         Post post = getDefaultPost("제목", "내용", user);
-        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글~", "존재하지 않는 게시글");
+        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글~");
 
         // when
         assertThatThrownBy(
-                () -> commentService.createComment(commentCreateRequest, -1L)
+                () -> commentService.createComment(commentCreateRequest, -1L, post.getPostId())
         ).isInstanceOf(InvalidCommenterException.class);
     }
 }

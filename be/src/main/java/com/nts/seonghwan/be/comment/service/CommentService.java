@@ -22,9 +22,10 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional()
-    public CommentCreateResponse createComment(CommentCreateRequest commentCreateRequest, Long userId){
+    public CommentCreateResponse createComment(
+            CommentCreateRequest commentCreateRequest, Long userId, String postId){
         User commenter = getUserById(userId);
-        Post post = getPostById(commentCreateRequest.getPostId());
+        Post post = getPostById(postId);
         Comment comment = commentCreateRequest.toEntity(commenter, post);
         Comment savedComment = commentRepository.save(comment);
         return CommentCreateResponse.from(savedComment, commenter);
