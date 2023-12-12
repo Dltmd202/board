@@ -6,13 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+public class CommentCreateResponse extends CommentResponse{
 
-public class CommentCreateResponse {
-    private Long commentId;
-    private String user;
-    private String content;
-    private String createdAt;
+    public CommentCreateResponse(Long id, String email, String content, String string) {
+        super(id, email, content, string);
+    }
 
     public static CommentCreateResponse from(Comment comment, User user){
         return new CommentCreateResponse(
