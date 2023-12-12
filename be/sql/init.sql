@@ -19,6 +19,7 @@ create table comment(
     content varchar(255) not null,
     user_id bigint not null,
     post_id bigint not null,
+    deleted_at datetime,
     foreign key (user_id) references user(id),
     foreign key (post_id) references post(id)
 );
