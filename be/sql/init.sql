@@ -13,3 +13,13 @@ create table post(
     created_at datetime  not null,
     foreign key (user_id) references user(id)
 );
+
+create table comment(
+    id bigint auto_increment primary key,
+    content varchar(255) not null,
+    user_id bigint not null,
+    post_id bigint not null,
+    deleted_at datetime,
+    foreign key (user_id) references user(id),
+    foreign key (post_id) references post(id)
+);
