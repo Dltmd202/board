@@ -66,7 +66,7 @@ const PostDetail = ({postId}) => {
               </div>
               <hr/>
             </div>
-            <Comment/>
+            <Comment postId={postId}/>
           </div>
         )}
     </div>
