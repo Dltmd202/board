@@ -3,6 +3,8 @@ package com.nts.seonghwan.be.comment.entities;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -16,6 +18,7 @@ import static lombok.AccessLevel.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +33,10 @@ public class Comment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
     @Column()
     private LocalDateTime deletedAt;

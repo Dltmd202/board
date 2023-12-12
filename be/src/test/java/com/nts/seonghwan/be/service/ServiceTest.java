@@ -1,5 +1,6 @@
 package com.nts.seonghwan.be.service;
 
+import com.nts.seonghwan.be.comment.service.CommentService;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.service.PostService;
 import com.nts.seonghwan.be.user.entities.User;
@@ -24,6 +25,9 @@ public class ServiceTest {
 
     @Autowired
     public PostService postService;
+
+    @Autowired
+    public CommentService commentService;
 
     @Autowired
     public EntityManager em;
