@@ -2,7 +2,7 @@ import axios from "axios";
 
 const createRequest = () => {
   const instance = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: process.env.REACT_APP_API_END_POINT,
     timeout: 3000
   });
   return instance;

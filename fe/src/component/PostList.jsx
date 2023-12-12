@@ -1,17 +1,35 @@
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {postApi} from "../api/post";
 
 const PostList = () => {
   const navigate = useNavigate();
+  const [totalPage, setTotalPage] = useState(0);
+
+  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
   const titleStyle = {minWidth: '200px'};
-  const defaultPost = {
-    title: '제목1',
-    user: 'abc123@abc.com',
-    createdAt: '2023.12.12',
-    postId: 'ea642987-0e39-4cfc-9d4f-f8356b0e8658',
-  }
+
+  useEffect( () => {
+    const getPostList = async () => {
+      setLoading(true);
+      try {
+        const postResponse = await postApi.getPosts(page);
+        setPosts(postResponse.data.response.content);
+        setTotalPage(postResponse.data.response.totalPages);
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getPostList();
+  }, [page]);
+
+
 
   const handlePostItemClick = (postId) => {
-    navigate(`/post/${postId}`);
+    navigate(`/posts/${postId}`);
   }
 
   return (
@@ -29,29 +47,26 @@ const PostList = () => {
         </tr>
         </thead>
         <tbody>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
-        <PostListItem post={defaultPost} onItemClick={handlePostItemClick}/>
+        {!loading ? posts.map((p, i) =>
+          <PostListItem post={p} onItemClick={handlePostItemClick} key={i}/>
+        ) : (
+          <tr>
+            <td colSpan="6" className="text-center">Loading...</td>
+          </tr>
+        )}
         </tbody>
       </table>
 
       <nav aria-label="Page navigation example">
         <ul className="pagination">
-          <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-          <li className="page-item"><a className="page-link" href="#">1</a></li>
-          <li className="page-item"><a className="page-link" href="#">2</a></li>
-          <li className="page-item"><a className="page-link" href="#">3</a></li>
-          <li className="page-item"><a className="page-link" href="#">4</a></li>
-          <li className="page-item"><a className="page-link" href="#">5</a></li>
-          <li className="page-item"><a className="page-link" href="#">Next</a></li>
+          <li
+            className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+            <p className="page-link" onClick={() => setPage(page - 1)}>Previous</p>
+          </li>
+          <li
+            className={`page-item ${page >= totalPage ? 'disabled' : ''}`}>
+            <p className="page-link" onClick={() => setPage(page + 1)}>Next</p>
+          </li>
         </ul>
       </nav>
     </div>
