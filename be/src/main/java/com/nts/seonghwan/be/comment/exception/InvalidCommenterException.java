@@ -5,6 +5,6 @@ import com.nts.seonghwan.be.common.error.exception.ErrorCode;
 
 public class InvalidCommenterException extends BusinessException {
     public InvalidCommenterException() {
-        super(ErrorCode.INVALID_REPEATED_PASSWORD);
+        super(ErrorCode.INVALID_COMMENTER);
     }
 }
