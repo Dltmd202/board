@@ -2,8 +2,11 @@ package com.nts.seonghwan.be.post.service;
 
 import com.nts.seonghwan.be.post.dto.PostCreateRequest;
 import com.nts.seonghwan.be.post.dto.PostCreateResponse;
+import com.nts.seonghwan.be.post.dto.PostDetailResponse;
 import com.nts.seonghwan.be.post.dto.PostListResponse;
+import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.exception.InvalidWriterException;
+import com.nts.seonghwan.be.post.exception.NotFoundPostException;
 import com.nts.seonghwan.be.service.ServiceTest;
 import com.nts.seonghwan.be.user.entities.User;
 import org.assertj.core.api.Assertions;
@@ -70,5 +73,34 @@ class PostServiceTest extends ServiceTest {
 
         // then
         assertThat(post.getTotalElements()).isEqualTo(0);
+    }
+
+    @Test
+    void getPost는_게시글을_조회한다() {
+        // given
+        User user = getDefaultUser("def123@abc.com", "1234");
+        Post post = getDefaultPost("title", "content", user);
+
+        // when
+        PostDetailResponse postDetail = postService.getPost(post.getPostId());
+
+        // then
+        assertThat(postDetail.getTitle()).isEqualTo("title");
+        assertThat(postDetail.getContent()).isEqualTo("content");
+        assertThat(postDetail.getUser()).isEqualTo("def123@abc.com");
+        assertThat(postDetail.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void getPost는_잚못된_아이디의_게시글은_조회하지_못_한다() {
+        // given
+        User user = getDefaultUser("def123@abc.com", "1234");
+        Post post = getDefaultPost("title", "content", user);
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> postService.getPost("abc")
+        ).isInstanceOf(NotFoundPostException.class);
     }
 }
