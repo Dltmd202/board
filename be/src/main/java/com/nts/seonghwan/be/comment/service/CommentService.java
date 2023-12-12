@@ -2,6 +2,7 @@ package com.nts.seonghwan.be.comment.service;
 
 import com.nts.seonghwan.be.comment.dto.CommentCreateRequest;
 import com.nts.seonghwan.be.comment.dto.CommentCreateResponse;
+import com.nts.seonghwan.be.comment.dto.CommentResponse;
 import com.nts.seonghwan.be.comment.entities.Comment;
 import com.nts.seonghwan.be.comment.exception.InvalidCommenterException;
 import com.nts.seonghwan.be.comment.repository.CommentRepository;
@@ -11,6 +12,8 @@ import com.nts.seonghwan.be.post.repository.PostRepository;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,13 @@ public class CommentService {
         Comment comment = commentCreateRequest.toEntity(commenter, post);
         Comment savedComment = commentRepository.save(comment);
         return CommentCreateResponse.from(savedComment, commenter);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommentResponse> getComments(String postId, Pageable pageable) {
+        Post post = getPostById(postId);
+        return commentRepository.findAllByPost(post, pageable)
+                .map(CommentResponse::from);
     }
 
     private User getUserById(Long userId){
