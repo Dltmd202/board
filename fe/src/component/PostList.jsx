@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {postApi} from "../api/post";
+import {formatDate} from "../common/utils/dateUtils";
 
 const PostList = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const PostList = () => {
 
   return (
     <div>
-      <h1 className="mt-5 mb-2">게시판</h1>
+      <h1 className="mb-2">게시판</h1>
       <table className="table table-hover">
         <thead className="table-light">
         <tr>
@@ -93,9 +94,9 @@ const PostListItem = ({
 
   return (
     <tr onClick={onClick}>
-      <td>{truncateString(title, 20)}</td>
+      <td>{truncateString(title, 10)}</td>
       <td>{truncateString(user, 15)}</td>
-      <td>{createdAt}</td>
+      <td>{formatDate(createdAt)}</td>
       <td>3</td>
       <td>3</td>
       <td>1000</td>
