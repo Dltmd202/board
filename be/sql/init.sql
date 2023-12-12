@@ -20,6 +20,7 @@ create table comment(
     user_id bigint not null,
     post_id bigint not null,
     deleted_at datetime,
+    created_at datetime  not null,
     foreign key (user_id) references user(id),
     foreign key (post_id) references post(id)
 );

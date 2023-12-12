@@ -3,6 +3,7 @@ package com.nts.seonghwan.be.comment.entities;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 
@@ -30,6 +31,10 @@ public class Comment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
     @Column()
     private LocalDateTime deletedAt;
