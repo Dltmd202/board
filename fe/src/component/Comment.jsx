@@ -8,21 +8,50 @@ const Comment = ({postId}) => {
   const [page, setPage] = useState(1);
   const [comments, setComments] = useState([]);
   const [hasNextComment, setHasNextComment] = useState(true);
+  const [newComment, setNewComment] = useState('');
+  const [availToSubmit, setAvailToSubmit] = useState(false);
 
   useEffect(() => {
-    const getComments = async () => {
-      try {
-        const commentsResponse = await commentApi.getComments(postId, page);
-        setTotalCommentCount(commentsResponse.data.response.totalElements);
-        setComments([...comments, ...(commentsResponse.data.response.content)]);
-        setHasNextComment(!commentsResponse.data.response.last);
-      } catch (e) {
-        console.log(e);
-      }
-    }
+    setAvailToSubmit(0 < newComment.length && newComment.length < 255);
+  }, [newComment]);
 
-    getComments();
-  }, [page]);
+  useEffect(() => {
+    getComments(page);
+  }, []);
+
+  const getComments = async (page, slice=0) => {
+    try {
+      const commentsResponse = await commentApi.getComments(postId, page);
+      const newComments = commentsResponse.data.response.content;
+
+      setTotalCommentCount(commentsResponse.data.response.totalElements);
+      setComments([...comments.slice(0, comments.length - slice), ...newComments]);
+      setHasNextComment(!commentsResponse.data.response.last);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const onMoreCommentButtonClick = async () => {
+    const excessCount = comments.length % 5;
+    if (excessCount > 0) {
+      await getComments(page, excessCount);
+    } else {
+      await getComments(page + 1);
+      setPage(page + 1);
+    }
+  }
+
+  const onSubmitCreateComment = async () => {
+    try {
+      await commentApi.createComment(postId, newComment);
+      setHasNextComment(true);
+      setTotalCommentCount(totalCommentCount + 1);
+      setNewComment('');
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <div>
@@ -42,10 +71,14 @@ const Comment = ({postId}) => {
             <Button
               disabled={!hasNextComment}
               word="더보기"
-              onClick={() => setPage(page + 1)}/>
+              onClick={onMoreCommentButtonClick}/>
         </div>
       </div>
-      <CommentForm />
+      <CommentForm
+        onInput={setNewComment}
+        onSubmit={onSubmitCreateComment}
+        availToSubmit={availToSubmit}
+        comment={newComment}/>
     </div>
   )
 }
@@ -69,13 +102,20 @@ const CommentDetail = ({comment}) => {
   )
 }
 
-const CommentForm = () => {
+const CommentForm = ({availToSubmit, comment, onSubmit, onInput}) => {
+
   return <div className="mb-5">
     <div className="d-flex justify-content-between mb-2">
       <label className="text-al text-body-secondary mb-2">댓글 작성하기</label>
-      <Button word="제출하기" />
+      <Button word="제출하기" disabled={!availToSubmit} onClick={onSubmit}/>
     </div>
-    <textarea className="form-control" id="comment" rows="3"></textarea>
+    <textarea
+      onInput={(e) => onInput(e.target.value)}
+      className="form-control"
+      id="comment"
+      rows="3"
+      value={comment}
+    />
   </div>;
 }
 
