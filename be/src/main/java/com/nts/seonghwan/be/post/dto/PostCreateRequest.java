@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PostCreateRequest {
 
     private String content;
 
+    @Size(max = 5, message = "태그는 최대 5개까지만 입력할 수 있습니다.")
     private List<String> tag;
 
     public Post toEntity(User writer){
