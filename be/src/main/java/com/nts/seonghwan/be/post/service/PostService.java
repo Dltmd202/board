@@ -35,7 +35,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<PostListResponse> findPost(Pageable pageable){
-        return postRepository.findAll(pageable).map(PostListResponse::new);
+        return postRepository.findByOrderByIdDesc(pageable).map(PostListResponse::new);
     }
 
     @Transactional(readOnly = true)

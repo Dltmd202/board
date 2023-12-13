@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Page<Post> findAll(Pageable pageable);
+    Page<Post> findByOrderByIdDesc(Pageable pageable);
 
     @Query("select p from Post p join fetch p.user where p.postId = :postId")
     Optional<Post> findByIdWithUser(String postId);
