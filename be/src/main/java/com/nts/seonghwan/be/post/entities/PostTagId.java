@@ -10,8 +10,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostTagId implements Serializable {
-    private Post post;
-    private Tag tag;
+    private Long post;
+    private String tag;
 
     @Override
     public boolean equals(Object o) {
