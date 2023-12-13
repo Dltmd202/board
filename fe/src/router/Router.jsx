@@ -3,6 +3,7 @@ import JoinPage from "../pages/JoinPage";
 import LoginPage from "../pages/LoginPage";
 import PostListPage from "../pages/PostListPage";
 import PostDetailPage from "../pages/PostDetailPage";
+import PostCreatePage from "../pages/PostCreatePage";
 
 const Routers = () => {
   return(
@@ -12,6 +13,7 @@ const Routers = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/posts" element={<PostListPage />} />
         <Route path="/posts/:postId" element={<PostDetailPage />} />
+        <Route path="/posts/create" element={<PostCreatePage />} />
       </Routes>
     </BrowserRouter>
   )
