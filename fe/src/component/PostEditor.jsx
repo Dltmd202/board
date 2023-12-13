@@ -2,7 +2,7 @@ import Input from "./Input";
 import Button from "./Button";
 import {useEffect, useState} from "react";
 
-const PostEditor = () => {
+const PostEditor = ({onSubmit}) => {
   const [post, setPost] = useState({
     title: '',
     content: '',
@@ -17,6 +17,10 @@ const PostEditor = () => {
   useEffect(() => {
     console.log(post);
   }, [post]);
+
+  const onSubmitPost = async () => {
+    onSubmit(post);
+  }
 
   const onTitleChange = (e) => {
     setPost({
@@ -42,7 +46,11 @@ const PostEditor = () => {
         rows="10" />
       <Input label="해시태그" />
       <div className="d-flex justify-content-end">
-        <Button word="제출하기" disabled={!availableSubmit} />
+        <Button
+          word="제출하기"
+          onClick={onSubmitPost}
+          disabled={!availableSubmit}
+        />
       </div>
     </div>
   );
