@@ -2,11 +2,9 @@ package com.nts.seonghwan.be.user.controller;
 
 import com.nts.seonghwan.be.common.utils.ApiUtils;
 import com.nts.seonghwan.be.common.utils.ApiUtils.ApiResult;
+import com.nts.seonghwan.be.config.security.SessionManagerAttribute;
 import com.nts.seonghwan.be.config.security.SimpleSessionManager;
-import com.nts.seonghwan.be.user.dto.SigninRequest;
-import com.nts.seonghwan.be.user.dto.SigninResponse;
-import com.nts.seonghwan.be.user.dto.SignupRequest;
-import com.nts.seonghwan.be.user.dto.SignupResponse;
+import com.nts.seonghwan.be.user.dto.*;
 import com.nts.seonghwan.be.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,5 +48,14 @@ public class UserApiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiUtils.success(login));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<ApiResult<UserInfoResponse>> getUserInfo(
+            @SessionManagerAttribute Long userId
+    ){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiUtils.success(userService.getUserInfo(userId)));
     }
 }

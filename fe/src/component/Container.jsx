@@ -1,9 +1,9 @@
-export const Container = ({children, maxWidth}) => {
+export const Container = ({children, maxWidth, className}) => {
   const style = {
     maxWidth: maxWidth,
   };
   return (
-    <div className="container-sm" style={style}>
+    <div className={`container-sm ${className}`} style={style}>
       {children}
     </div>
   )

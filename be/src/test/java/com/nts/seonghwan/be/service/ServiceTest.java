@@ -1,5 +1,9 @@
 package com.nts.seonghwan.be.service;
 
+import com.nts.seonghwan.be.comment.entities.Comment;
+import com.nts.seonghwan.be.comment.service.CommentService;
+import com.nts.seonghwan.be.post.entities.Post;
+import com.nts.seonghwan.be.post.service.PostService;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.service.PasswordEncoder;
 import com.nts.seonghwan.be.user.service.UserService;
@@ -10,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.UUID;
 
 @SpringBootTest
 @Transactional
@@ -18,6 +23,12 @@ public class ServiceTest {
 
     @Autowired
     public UserService userService;
+
+    @Autowired
+    public PostService postService;
+
+    @Autowired
+    public CommentService commentService;
 
     @Autowired
     public EntityManager em;
@@ -33,6 +44,27 @@ public class ServiceTest {
         prevUser.encryptPassword(passwordEncoder);
         em.persist(prevUser);
         return prevUser;
+    }
+
+    public Post getDefaultPost(String title, String content, User user){
+        Post prevPost = Post.builder()
+                .title(title)
+                .content(content)
+                .user(user)
+                .postId(UUID.randomUUID().toString())
+                .build();
+        em.persist(prevPost);
+        return prevPost;
+    }
+
+    public Comment getDefaultComment(String content, User user, Post post){
+        Comment prevComment = Comment.builder()
+                .content(content)
+                .user(user)
+                .post(post)
+                .build();
+        em.persist(prevComment);
+        return prevComment;
     }
 
 }
