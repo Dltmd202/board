@@ -1,5 +1,6 @@
 package com.nts.seonghwan.be.service;
 
+import com.nts.seonghwan.be.comment.entities.Comment;
 import com.nts.seonghwan.be.comment.service.CommentService;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.service.PostService;
@@ -54,6 +55,16 @@ public class ServiceTest {
                 .build();
         em.persist(prevPost);
         return prevPost;
+    }
+
+    public Comment getDefaultComment(String content, User user, Post post){
+        Comment prevComment = Comment.builder()
+                .content(content)
+                .user(user)
+                .post(post)
+                .build();
+        em.persist(prevComment);
+        return prevComment;
     }
 
 }
