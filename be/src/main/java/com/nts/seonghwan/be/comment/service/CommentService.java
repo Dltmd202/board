@@ -4,7 +4,9 @@ import com.nts.seonghwan.be.comment.dto.CommentCreateRequest;
 import com.nts.seonghwan.be.comment.dto.CommentCreateResponse;
 import com.nts.seonghwan.be.comment.dto.CommentResponse;
 import com.nts.seonghwan.be.comment.entities.Comment;
+import com.nts.seonghwan.be.comment.exception.CommentAlreadyDeletedException;
 import com.nts.seonghwan.be.comment.exception.InvalidCommenterException;
+import com.nts.seonghwan.be.comment.exception.NotFoundCommentException;
 import com.nts.seonghwan.be.comment.repository.CommentRepository;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
@@ -35,10 +37,24 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentResponse> getComments(String postId, Pageable pageable) {
+    public Page<CommentResponse> getComments(String postId, Long userId, Pageable pageable) {
         Post post = getPostById(postId);
         return commentRepository.findAllByPost(post, pageable)
-                .map(CommentResponse::from);
+                .map(c -> CommentResponse.from(c, userId));
+    }
+
+    @Transactional
+    public void deleteComment(String postId, Long commentId, Long userId) {
+        Comment comment = getCommentById(postId, commentId);
+        validateUserComment(comment, userId);
+        validateAlreadyDeletedComment(comment);
+
+        comment.delete();
+    }
+
+    private Comment getCommentById(String postId, Long commentId) {
+        return commentRepository.findByIdAndPostPostId(commentId, postId)
+                .orElseThrow(NotFoundCommentException::new);
     }
 
     private User getUserById(Long userId){
@@ -49,5 +65,13 @@ public class CommentService {
     private Post getPostById(String postId){
         return postRepository.findByIdWithUser(postId)
                 .orElseThrow(NotFoundPostException::new);
+    }
+
+    private void validateUserComment(Comment comment, Long userId) {
+        if (!comment.getUser().getId().equals(userId)) throw new InvalidCommenterException();
+    }
+
+    private void validateAlreadyDeletedComment(Comment comment) {
+        if (comment.isDeleted()) throw new CommentAlreadyDeletedException();
     }
 }
