@@ -24,3 +24,16 @@ create table comment(
     foreign key (user_id) references user(id),
     foreign key (post_id) references post(id)
 );
+
+create table tag(
+    name varchar(20) not null primary key
+);
+
+create table post_tag(
+    tag_id  varchar(20) not null,
+    post_id bigint      not null,
+    primary key (post_id, tag_id),
+    constraint foreign key (tag_id) references tag (name),
+    constraint foreign key (post_id) references post (id)
+);
+
