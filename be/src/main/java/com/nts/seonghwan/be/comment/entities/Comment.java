@@ -40,4 +40,33 @@ public class Comment {
 
     @Column()
     private LocalDateTime deletedAt;
+
+    public String getContent() {
+        if(this.isDeleted()) return "삭제된 댓글입니다.";
+        return this.content;
+    }
+
+    public boolean validateCommentOwner(User user) {
+        return this.validateCommentOwner(user.getId());
+    }
+
+    public boolean validateCommentOwner(Long userId) {
+        return this.user.getId().equals(userId);
+    }
+
+    public boolean validateAbleToDelete(Long userId){
+        return this.validateCommentOwner(userId) && !this.isDeleted();
+    }
+
+    public boolean validateAbleToDelete(User user){
+        return this.validateCommentOwner(user) && !this.isDeleted();
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
+    }
 }

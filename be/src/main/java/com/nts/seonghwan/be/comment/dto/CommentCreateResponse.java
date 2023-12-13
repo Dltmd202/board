@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 public class CommentCreateResponse extends CommentResponse{
 
-    public CommentCreateResponse(Long id, String email, String content, String string) {
-        super(id, email, content, string);
+    public CommentCreateResponse(Long commentId, String user, String content, String createdAt, boolean isDeleted, boolean ableToDelete) {
+        super(commentId, user, content, createdAt, isDeleted, ableToDelete);
     }
 
     public static CommentCreateResponse from(Comment comment, User user){
@@ -17,6 +17,8 @@ public class CommentCreateResponse extends CommentResponse{
                 comment.getId(),
                 user.getEmail(),
                 comment.getContent(),
-                comment.getCreatedAt().toString());
+                comment.getCreatedAt().toString(),
+                comment.isDeleted(),
+                comment.validateAbleToDelete(user));
     }
 }
