@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import java.util.List;
 
 import static lombok.AccessLevel.*;
 
@@ -21,6 +24,9 @@ public class PostCreateRequest {
     private String title;
 
     private String content;
+
+    @Size(max = 5, message = "태그는 최대 5개까지만 입력할 수 있습니다.")
+    private List<String> tag;
 
     public Post toEntity(User writer){
         return Post.builder()

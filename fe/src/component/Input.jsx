@@ -1,5 +1,6 @@
 export const Input = ({
                         type,
+                        value,
                         label,
                         onInput,
                         status,
@@ -26,9 +27,10 @@ export const Input = ({
         <p>{valificationMessage()}</p>
       </div>
       <input
+        value={value}
         onInput={onInput}
         type={type}
-        className={`form-control ${checkInvalid()}`}/>
+        className={`form-control ${checkInvalid()}`} />
     </div>
   )
 }
