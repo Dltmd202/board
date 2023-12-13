@@ -46,6 +46,7 @@ const Comment = ({postId}) => {
     try {
       await commentApi.createComment(postId, newComment);
       setHasNextComment(true);
+      setTotalCommentCount(totalCommentCount + 1);
       setNewComment('');
     } catch (e) {
       console.log(e);
