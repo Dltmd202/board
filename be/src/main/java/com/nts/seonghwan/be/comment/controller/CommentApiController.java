@@ -38,12 +38,25 @@ public class CommentApiController {
     @GetMapping
     public ResponseEntity<ApiResult<Page<CommentResponse>>> getComment(
             @PathVariable("postId") String postId,
+            @SessionManagerAttribute Long userId,
             Pageable pageable
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(
-                        ApiUtils.success(commentService.getComments(postId, pageable))
+                        ApiUtils.success(commentService.getComments(postId, userId, pageable))
                 );
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResult<Void>> deleteComment(
+            @PathVariable String postId,
+            @PathVariable Long commentId,
+            @SessionManagerAttribute Long userId
+    ) {
+        commentService.deleteComment(postId, commentId, userId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(null);
     }
 }
