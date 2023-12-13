@@ -59,6 +59,14 @@ const PostEditor = ({onSubmit}) => {
     setTagString(e.target.value);
   }
 
+  const onTagDelete = (idx) => {
+    const updatedHashtags = [...post.tag.slice(0, idx), ...post.tag.slice(idx + 1)];
+    setPost({
+      ...post,
+      tag: updatedHashtags
+    })
+  }
+
   return (
     <div>
       <Input label="제목" onInput={onTitleChange}/>
@@ -69,7 +77,14 @@ const PostEditor = ({onSubmit}) => {
         rows="10"/>
       <div className="mb-3 d-flex">
         {post.tag.map((tag, index) =>
-            <p key={index} className="me-2 badge text-bg-primary ">#{tag}</p>
+            <button key={index} className="me-2 btn btn-primary d-flex">
+              <span>#{tag}</span>
+              <button
+                onClick={() => onTagDelete(index)}
+                type="button"
+                className="btn-close"
+                aria-label="Close"></button>
+            </button>
         )}
       </div>
       <Input
