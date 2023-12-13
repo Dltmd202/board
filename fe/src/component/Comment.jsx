@@ -53,6 +53,19 @@ const Comment = ({postId}) => {
     }
   }
 
+  const onDeleteComment = async (commentId, commentIdx) => {
+    try {
+      await commentApi.deleteComment(postId, commentId);
+      const comment = comments[commentIdx];
+      comment.content = '삭제된 댓글입니다.';
+      comment.ableToDelete = false;
+      comment.deleted = true;
+      setComments([...comments.slice(0, commentIdx), comment, ...comments.slice(commentIdx + 1)]);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
       <div className="d-flex mb-4 text-body-secondary">
@@ -63,7 +76,11 @@ const Comment = ({postId}) => {
       <div className="mb-5">
         { comments.map((comment, i) => (
           <>
-            <CommentDetail key={i} comment={comment}/>
+            <CommentDetail
+              key={i}
+              commentIdx={i}
+              onDelete={onDeleteComment}
+              comment={comment}/>
             <hr/>
           </>
         ))}
@@ -83,20 +100,23 @@ const Comment = ({postId}) => {
   )
 }
 
-const CommentDetail = ({comment}) => {
-  const {user, content, createdAt} = comment;
+const CommentDetail = ({comment, onDelete, commentIdx}) => {
+  const {commentId, user, content, createdAt, ableToDelete, deleted} = comment;
   return (
     <div className="d-flex">
       <div className="col-sm-10 mb-3 pe-2">
         <p className="mb-1">{user}</p>
-        <p className="mb-1">{content}</p>
+        <p className={`mb-1 ${deleted ? 'text-body-tertiary' : ''}`}>{content}</p>
         <p className="text-body-secondary">{formatDate(createdAt)}</p>
       </div>
       <div className="col-sm-2 d-flex justify-content-end lh-1 align-items-start">
-        <Button
-          type="button"
-          word="삭제하기"
-          className="me-1" />
+        {ableToDelete &&
+          <Button
+            onClick={() => onDelete(commentId, commentIdx)}
+            type="button"
+            word="삭제하기"
+            className="me-1" />
+        }
       </div>
     </div>
   )
