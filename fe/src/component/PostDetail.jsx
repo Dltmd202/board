@@ -66,6 +66,13 @@ const PostDetail = ({postId}) => {
               </div>
               <hr/>
             </div>
+            <div className="mb-3 d-flex">
+              {post.tag.map((tag, index) =>
+                <button key={index} className="me-2 btn btn-primary d-flex">
+                  <span>#{tag}</span>
+                </button>
+              )}
+            </div>
             <Comment postId={postId}/>
           </div>
         )}
