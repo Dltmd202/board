@@ -6,5 +6,8 @@ export const commentApi = {
   },
   createComment: (postId, content) => {
     return authRequest.post(`/api/v1/posts/${postId}/comments`, {content: content})
+  },
+  deleteComment: (postId, commentId) => {
+    return authRequest.delete(`/api/v1/posts/${postId}/comments/${commentId}`)
   }
 }
