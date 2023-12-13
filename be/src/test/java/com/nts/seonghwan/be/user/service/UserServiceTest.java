@@ -1,12 +1,10 @@
 package com.nts.seonghwan.be.user.service;
 
 import com.nts.seonghwan.be.service.ServiceTest;
-import com.nts.seonghwan.be.user.dto.SigninRequest;
-import com.nts.seonghwan.be.user.dto.SigninResponse;
-import com.nts.seonghwan.be.user.dto.SignupRequest;
-import com.nts.seonghwan.be.user.dto.SignupResponse;
+import com.nts.seonghwan.be.user.dto.*;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.exception.DuplicatedEmailException;
+import com.nts.seonghwan.be.user.exception.ForbiddenUserAccessException;
 import com.nts.seonghwan.be.user.exception.InvalidAuthenticationException;
 import com.nts.seonghwan.be.user.exception.InvalidRepeatedPasswordException;
 import org.junit.jupiter.api.Test;
@@ -115,5 +113,29 @@ class UserServiceTest extends ServiceTest {
                 .isInstanceOf(InvalidAuthenticationException.class);
     }
 
+    @Test
+    void getUserInfo는_해당하는_사용자의_정보를_반환한다() {
+        // given
+        User prevUser = getDefaultUser("abc123@abc.com", "1234");
+
+        // when
+        UserInfoResponse userInformation = userService.getUserInfo(prevUser.getId());
+
+        // then
+        assertThat(userInformation.getEmail()).isEqualTo("abc123@abc.com");
+        assertThat(userInformation.getId()).isEqualTo(prevUser.getId());
+    }
+
+    @Test
+    void getUserInfo는_유요하지_않은_사용자_정보_요청은_예외를_던진다() {
+        // given
+        User prevUser = getDefaultUser("abc123@abc.com", "1234");
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> userService.getUserInfo(prevUser.getId() + 1)
+        ).isInstanceOf(ForbiddenUserAccessException.class);;
+    }
 
 }

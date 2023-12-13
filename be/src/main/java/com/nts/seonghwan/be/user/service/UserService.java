@@ -1,12 +1,10 @@
 package com.nts.seonghwan.be.user.service;
 
 import com.nts.seonghwan.be.common.error.exception.BusinessException;
-import com.nts.seonghwan.be.user.dto.SigninRequest;
-import com.nts.seonghwan.be.user.dto.SigninResponse;
-import com.nts.seonghwan.be.user.dto.SignupRequest;
-import com.nts.seonghwan.be.user.dto.SignupResponse;
+import com.nts.seonghwan.be.user.dto.*;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.exception.DuplicatedEmailException;
+import com.nts.seonghwan.be.user.exception.ForbiddenUserAccessException;
 import com.nts.seonghwan.be.user.exception.InvalidAuthenticationException;
 import com.nts.seonghwan.be.user.exception.InvalidRepeatedPasswordException;
 import com.nts.seonghwan.be.user.repository.UserRepository;
@@ -44,6 +42,12 @@ public class UserService {
         return SigninResponse.from(user);
     }
 
+    @Transactional(readOnly = true)
+    public UserInfoResponse getUserInfo(Long userId) {
+        User user = getUserById(userId);
+        return UserInfoResponse.from(user);
+    }
+
     private void validateSignupRequestForm(SignupRequest signupRequest) {
         if(!signupRequest.isPasswordEqualToRepeatedPassword())
             throw new InvalidRepeatedPasswordException();
@@ -58,4 +62,10 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> exception);
     }
+
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(ForbiddenUserAccessException::new);
+    }
+
 }
