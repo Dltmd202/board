@@ -54,4 +54,11 @@ public class Post {
     public void tag(List<PostTag> tags){
         this.tags = tags;
     }
+
+    public List<String> getTag(){
+        return tags.stream()
+                .map(PostTag::getTag)
+                .map(Tag::getName)
+                .toList();
+    }
 }
