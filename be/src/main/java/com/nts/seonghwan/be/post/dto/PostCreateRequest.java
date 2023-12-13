@@ -9,6 +9,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
+import java.util.List;
+
 import static lombok.AccessLevel.*;
 
 @Getter
@@ -21,6 +23,8 @@ public class PostCreateRequest {
     private String title;
 
     private String content;
+
+    private List<String> tag;
 
     public Post toEntity(User writer){
         return Post.builder()
