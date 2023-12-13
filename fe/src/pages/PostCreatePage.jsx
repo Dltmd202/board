@@ -3,12 +3,22 @@ import Header from "../component/Header";
 import Button from "../component/Button";
 import Container from "../component/Container";
 import PostEditor from "../component/PostEditor";
+import {postApi} from "../api/post";
 
 const PostCreatePage = () => {
   const navigate = useNavigate();
 
   const onLoginButtonClick = () => {
     navigate('/login');
+  }
+
+  const onPostSubmit = async (post) => {
+    try{
+      const postResponse = await postApi.createPost(post);
+      navigate(`/posts/${postResponse.data.response.postId}`);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
@@ -21,7 +31,8 @@ const PostCreatePage = () => {
             <li className="breadcrumb-item active" aria-current="page">생성</li>
           </ol>
         </nav>
-        <PostEditor/>
+        <PostEditor
+          onSubmit={onPostSubmit}/>
       </Container>
     </div>
   );
