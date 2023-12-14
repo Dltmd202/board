@@ -48,6 +48,9 @@ public class Post implements Serializable{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostTag> tags;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostView> views;
+
     public void grantPostId(UUIDHolder uuidHolder){
         this.postId = uuidHolder.uuid();
     }
