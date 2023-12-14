@@ -3,7 +3,7 @@ package com.nts.seonghwan.be.preference.service;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
 import com.nts.seonghwan.be.post.repository.PostRepository;
-import com.nts.seonghwan.be.preference.dto.PreferenceToggleResponse;
+import com.nts.seonghwan.be.preference.dto.PreferenceResponse;
 import com.nts.seonghwan.be.preference.entities.Preference;
 import com.nts.seonghwan.be.preference.entities.PreferenceType;
 import com.nts.seonghwan.be.preference.exception.UnAuthorizedPreferenceException;
@@ -22,14 +22,14 @@ public class PreferenceService {
     private final PostRepository postRepository;
 
     @Transactional()
-    public PreferenceToggleResponse togglePreference(Long userId, String postId, PreferenceType type) {
+    public PreferenceResponse togglePreference(Long userId, String postId, PreferenceType type) {
         User user = getUserById(userId);
         Post post = getPostById(postId);
         Preference preference = this.getPreferenceById(user, post, type);
 
         preference.toggle();
         Long count = this.preferenceRepository.countByPostAndTypeAndDeletedAtIsNull(post, type);
-        return PreferenceToggleResponse.from(preference, type, count);
+        return PreferenceResponse.from(preference, type, count);
     }
 
     private User getUserById(Long id){

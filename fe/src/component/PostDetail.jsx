@@ -24,6 +24,7 @@ const PostDetail = ({postId}) => {
   }, []);
 
   useEffect(() => {
+    console.log(post);
   }, [post]);
 
   const onLikeButtonClick = async () => {
@@ -58,7 +59,7 @@ const PostDetail = ({postId}) => {
                 <div className="d-flex justify-content-between">
                   <WriterInformation label="작성자" info={post.user}/>
                   <WriterInformation label="작성일자" info={formatDate(post.createdAt)}/>
-                  <WriterInformation label="조회" info={"1,000"}/>
+                  <WriterInformation label="조회" info={post.viewCount}/>
                 </div>
                 <hr/>
               </div>

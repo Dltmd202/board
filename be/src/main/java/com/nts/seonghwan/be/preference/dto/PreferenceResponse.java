@@ -7,12 +7,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PreferenceToggleResponse {
+public class PreferenceResponse {
     private boolean ableToPreference;
     private PreferenceType type;
     private Long count;
 
-    public static PreferenceToggleResponse from(Preference preference, PreferenceType type, Long count){
-        return new PreferenceToggleResponse(preference.isDeleted(), type, count);
+    public static PreferenceResponse from(Preference preference, PreferenceType type, Long count){
+        return new PreferenceResponse(preference.isDeleted(), type, count);
     }
 }
