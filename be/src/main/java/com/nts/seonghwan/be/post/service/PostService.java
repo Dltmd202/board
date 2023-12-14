@@ -12,6 +12,9 @@ import com.nts.seonghwan.be.post.exception.InvalidWriterException;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
 import com.nts.seonghwan.be.post.repository.PostRepository;
 import com.nts.seonghwan.be.post.repository.PostViewRepository;
+import com.nts.seonghwan.be.preference.dto.PreferenceDto;
+import com.nts.seonghwan.be.preference.entities.PreferenceType;
+import com.nts.seonghwan.be.preference.repository.PreferenceRepository;
 import com.nts.seonghwan.be.tag.entities.Tag;
 import com.nts.seonghwan.be.tag.repository.TagRepository;
 import com.nts.seonghwan.be.user.entities.User;
@@ -31,6 +34,7 @@ public class PostService {
     private final UUIDHolder uuidHolder;
     private final TagRepository tagRepository;
     private final PostViewRepository postViewRepository;
+    private final PreferenceRepository preferenceRepository;
 
     @Transactional()
     public PostCreateResponse savePost(PostCreateRequest postCreate, Long userId) {
@@ -60,7 +64,12 @@ public class PostService {
 
         PostView view = post.view(user);
         postViewRepository.save(view);
-        return new PostDetailResponse(post);
+
+        Long viewCount = postViewRepository.countByPostPostId(postId);
+        PreferenceDto like = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
+        PreferenceDto unlike = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
+
+        return new PostDetailResponse(post, viewCount, like, unlike);
     }
 
     private User getWriterById(Long id){
