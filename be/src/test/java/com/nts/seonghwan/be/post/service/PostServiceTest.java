@@ -1,9 +1,6 @@
 package com.nts.seonghwan.be.post.service;
 
-import com.nts.seonghwan.be.post.dto.PostCreateRequest;
-import com.nts.seonghwan.be.post.dto.PostCreateResponse;
-import com.nts.seonghwan.be.post.dto.PostDetailResponse;
-import com.nts.seonghwan.be.post.dto.PostListResponse;
+import com.nts.seonghwan.be.post.dto.*;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.exception.InvalidWriterException;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
@@ -11,7 +8,6 @@ import com.nts.seonghwan.be.service.ServiceTest;
 import com.nts.seonghwan.be.user.entities.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -75,24 +71,24 @@ class PostServiceTest extends ServiceTest {
         getDefaultPost("title4", "content4", user2);
 
         // when
-        Page<PostListResponse> post = postService.findPost(Pageable.unpaged());
+        PostListResponse post = postService.findPost(Pageable.unpaged());
 
         // then
-        assertThat(post.getTotalElements()).isEqualTo(4);
-        assertThat(post.getContent().get(0).getTitle()).isEqualTo("title1");
-        assertThat(post.getContent().get(0).getUser()).isEqualTo("abc123@abc.com");
-        assertThat(post.getContent().get(3).getTitle()).isEqualTo("title4");
-        assertThat(post.getContent().get(3).getUser()).isEqualTo("abc124@abc.com");
+        assertThat(post.getPosts().getTotalElements()).isEqualTo(4);
+        assertThat(post.getPosts().getContent().get(0).getTitle()).isEqualTo("title1");
+        assertThat(post.getPosts().getContent().get(0).getUser()).isEqualTo("abc123@abc.com");
+        assertThat(post.getPosts().getContent().get(3).getTitle()).isEqualTo("title4");
+        assertThat(post.getPosts().getContent().get(3).getUser()).isEqualTo("abc124@abc.com");
     }
 
     @Test
     void findPost는_게시글이_없어도_호출할_수_있다() {
         // given
         // when
-        Page<PostListResponse> post = postService.findPost(Pageable.unpaged());
+        PostListResponse post = postService.findPost(Pageable.unpaged());
 
         // then
-        assertThat(post.getTotalElements()).isEqualTo(0);
+        assertThat(post.getPosts().getTotalElements()).isEqualTo(0);
     }
 
     @Test
