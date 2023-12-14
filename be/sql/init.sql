@@ -38,11 +38,13 @@ create table post_tag(
 );
 
 create table preference(
-    post_id bigint not null,
+    id bigint auto_increment primary key,
     user_id bigint not null,
+    post_id varchar(255) not null,
     type varchar(20) not null,
-    primary key (post_id, type, user_id),
-    constraint foreign key (post_id) references post (id),
+    deleted_at datetime,
+    constraint foreign key (post_id) references post (post_id),
     constraint foreign key (user_id) references user (id),
-    constraint check (type in ('LIKE', 'UNLIKE'))
+    constraint check (type in ('LIKE', 'UNLIKE')),
+    constraint unique (post_id, type, user_id)
 )

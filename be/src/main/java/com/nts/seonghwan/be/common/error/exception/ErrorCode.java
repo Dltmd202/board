@@ -21,6 +21,9 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
     ALREADY_DELETED_COMMENT(HttpStatus.BAD_REQUEST, "이미 삭제된 댓글입니다."),
 
+    // 좋아요 관련 에러
+    UNAUTHORIZED_PREFERENCE(HttpStatus.BAD_REQUEST, "사용자는 선호도를 남길 수 없습니다."),
+
     // 서버 내부 에러
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에 오류가 발생했습니다.");
 
