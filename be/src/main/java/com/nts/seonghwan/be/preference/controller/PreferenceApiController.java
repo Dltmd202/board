@@ -2,7 +2,7 @@ package com.nts.seonghwan.be.preference.controller;
 
 import com.nts.seonghwan.be.common.utils.ApiUtils;
 import com.nts.seonghwan.be.config.security.SessionManagerAttribute;
-import com.nts.seonghwan.be.preference.dto.PreferenceToggleResponse;
+import com.nts.seonghwan.be.preference.dto.PreferenceResponse;
 import com.nts.seonghwan.be.preference.entities.PreferenceType;
 import com.nts.seonghwan.be.preference.service.PreferenceService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class PreferenceApiController {
     private final PreferenceService preferenceService;
 
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult<PreferenceToggleResponse>> togglePreference(
+    public ResponseEntity<ApiUtils.ApiResult<PreferenceResponse>> togglePreference(
             @PathVariable String postId,
             @RequestParam PreferenceType type,
             @SessionManagerAttribute Long userId

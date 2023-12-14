@@ -2,7 +2,7 @@ package com.nts.seonghwan.be.preference.service;
 
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
-import com.nts.seonghwan.be.preference.dto.PreferenceToggleResponse;
+import com.nts.seonghwan.be.preference.dto.PreferenceResponse;
 import com.nts.seonghwan.be.preference.entities.PreferenceType;
 import com.nts.seonghwan.be.preference.exception.UnAuthorizedPreferenceException;
 import com.nts.seonghwan.be.service.ServiceTest;
@@ -21,13 +21,13 @@ class PreferenceServiceTest extends ServiceTest {
         Post post = getDefaultPost("title", "content", user);
 
         // when
-        PreferenceToggleResponse preferenceToggleResponse =
+        PreferenceResponse preferenceResponse =
                 preferenceService.togglePreference(user.getId(), post.getPostId(), PreferenceType.LIKE);
 
         // then
-        assertThat(preferenceToggleResponse.isAbleToPreference()).isEqualTo(false);
-        assertThat(preferenceToggleResponse.getType()).isEqualTo(PreferenceType.LIKE);
-        assertThat(preferenceToggleResponse.getCount()).isEqualTo(1L);
+        assertThat(preferenceResponse.isAbleToPreference()).isEqualTo(false);
+        assertThat(preferenceResponse.getType()).isEqualTo(PreferenceType.LIKE);
+        assertThat(preferenceResponse.getCount()).isEqualTo(1L);
     }
 
     @Test
@@ -38,13 +38,13 @@ class PreferenceServiceTest extends ServiceTest {
         getDefaultPreference(user, post, PreferenceType.LIKE);
 
         // when
-        PreferenceToggleResponse preferenceToggleResponse =
+        PreferenceResponse preferenceResponse =
                 preferenceService.togglePreference(user.getId(), post.getPostId(), PreferenceType.LIKE);
 
         // then
-        assertThat(preferenceToggleResponse.isAbleToPreference()).isEqualTo(true);
-        assertThat(preferenceToggleResponse.getType()).isEqualTo(PreferenceType.LIKE);
-        assertThat(preferenceToggleResponse.getCount()).isEqualTo(0L);
+        assertThat(preferenceResponse.isAbleToPreference()).isEqualTo(true);
+        assertThat(preferenceResponse.getType()).isEqualTo(PreferenceType.LIKE);
+        assertThat(preferenceResponse.getCount()).isEqualTo(0L);
     }
 
     @Test
@@ -54,13 +54,13 @@ class PreferenceServiceTest extends ServiceTest {
         Post post = getDefaultPost("title", "content", user);
 
         // when
-        PreferenceToggleResponse preferenceToggleResponse =
+        PreferenceResponse preferenceResponse =
                 preferenceService.togglePreference(user.getId(), post.getPostId(), PreferenceType.UNLIKE);
 
         // then
-        assertThat(preferenceToggleResponse.isAbleToPreference()).isEqualTo(false);
-        assertThat(preferenceToggleResponse.getType()).isEqualTo(PreferenceType.UNLIKE);
-        assertThat(preferenceToggleResponse.getCount()).isEqualTo(1L);
+        assertThat(preferenceResponse.isAbleToPreference()).isEqualTo(false);
+        assertThat(preferenceResponse.getType()).isEqualTo(PreferenceType.UNLIKE);
+        assertThat(preferenceResponse.getCount()).isEqualTo(1L);
     }
 
     @Test
@@ -71,13 +71,13 @@ class PreferenceServiceTest extends ServiceTest {
         getDefaultPreference(user, post, PreferenceType.UNLIKE);
 
         // when
-        PreferenceToggleResponse preferenceToggleResponse =
+        PreferenceResponse preferenceResponse =
                 preferenceService.togglePreference(user.getId(), post.getPostId(), PreferenceType.UNLIKE);
 
         // then
-        assertThat(preferenceToggleResponse.isAbleToPreference()).isEqualTo(true);
-        assertThat(preferenceToggleResponse.getType()).isEqualTo(PreferenceType.UNLIKE);
-        assertThat(preferenceToggleResponse.getCount()).isEqualTo(0L);
+        assertThat(preferenceResponse.isAbleToPreference()).isEqualTo(true);
+        assertThat(preferenceResponse.getType()).isEqualTo(PreferenceType.UNLIKE);
+        assertThat(preferenceResponse.getCount()).isEqualTo(0L);
     }
 
     @Test
