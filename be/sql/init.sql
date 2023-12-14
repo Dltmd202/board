@@ -46,4 +46,3 @@ create table preference(
     constraint foreign key (user_id) references user (id),
     constraint check (type in ('LIKE', 'UNLIKE'))
 )
-    Add post preference related sql ddlAdd post preference related sql ddl
