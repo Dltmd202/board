@@ -1,10 +1,8 @@
 package com.nts.seonghwan.be.post.service;
 
+import com.nts.seonghwan.be.comment.repository.CommentRepository;
 import com.nts.seonghwan.be.common.service.UUIDHolder;
-import com.nts.seonghwan.be.post.dto.PostCreateRequest;
-import com.nts.seonghwan.be.post.dto.PostCreateResponse;
-import com.nts.seonghwan.be.post.dto.PostDetailResponse;
-import com.nts.seonghwan.be.post.dto.PostListResponse;
+import com.nts.seonghwan.be.post.dto.*;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.entities.PostTag;
 import com.nts.seonghwan.be.post.entities.PostView;
@@ -35,6 +33,7 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostViewRepository postViewRepository;
     private final PreferenceRepository preferenceRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional()
     public PostCreateResponse savePost(PostCreateRequest postCreate, Long userId) {
@@ -53,8 +52,16 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostListResponse> findPost(Pageable pageable){
-        return postRepository.findByOrderByIdDesc(pageable).map(PostListResponse::new);
+    public PostListResponse findPost(Pageable pageable){
+        Page<PostListResponseElement> posts = postRepository.findByOrderByIdDesc(pageable)
+                .map(p -> {
+                    Long viewCount = postViewRepository.countByPostPostId(p.getPostId());
+                    Long commentCount = commentRepository.countByPostPostIdAndDeletedAtIsNull(p.getPostId());
+                    Long likeCount = preferenceRepository.countByPostAndTypeAndDeletedAtIsNull(p, PreferenceType.LIKE);
+                    return new PostListResponseElement(p, viewCount, commentCount, likeCount);
+                });
+        long commentCount = commentRepository.countByDeletedAtIsNull();
+        return new PostListResponse(posts, commentCount);
     }
 
     @Transactional()

@@ -3,10 +3,7 @@ package com.nts.seonghwan.be.post.controller;
 import com.nts.seonghwan.be.common.utils.ApiUtils;
 import com.nts.seonghwan.be.common.utils.ApiUtils.ApiResult;
 import com.nts.seonghwan.be.config.security.SessionManagerAttribute;
-import com.nts.seonghwan.be.post.dto.PostCreateRequest;
-import com.nts.seonghwan.be.post.dto.PostCreateResponse;
-import com.nts.seonghwan.be.post.dto.PostDetailResponse;
-import com.nts.seonghwan.be.post.dto.PostListResponse;
+import com.nts.seonghwan.be.post.dto.*;
 import com.nts.seonghwan.be.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +31,7 @@ public class PostApiController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResult<Page<PostListResponse>>> getPost(
+    public ResponseEntity<ApiResult<PostListResponse>> getPost(
             Pageable pageable
     ){
         return ResponseEntity
