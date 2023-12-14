@@ -7,12 +7,15 @@ import com.nts.seonghwan.be.post.dto.PostDetailResponse;
 import com.nts.seonghwan.be.post.dto.PostListResponse;
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.post.entities.PostTag;
+import com.nts.seonghwan.be.post.entities.PostView;
 import com.nts.seonghwan.be.post.exception.InvalidWriterException;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
 import com.nts.seonghwan.be.post.repository.PostRepository;
+import com.nts.seonghwan.be.post.repository.PostViewRepository;
 import com.nts.seonghwan.be.tag.entities.Tag;
 import com.nts.seonghwan.be.tag.repository.TagRepository;
 import com.nts.seonghwan.be.user.entities.User;
+import com.nts.seonghwan.be.user.exception.UserNotFoundException;
 import com.nts.seonghwan.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,10 +30,11 @@ public class PostService {
     private final UserRepository userRepository;
     private final UUIDHolder uuidHolder;
     private final TagRepository tagRepository;
+    private final PostViewRepository postViewRepository;
 
     @Transactional()
     public PostCreateResponse savePost(PostCreateRequest postCreate, Long userId) {
-        User writer = getUserById(userId);
+        User writer = getWriterById(userId);
         Post post = postCreate.toEntity(writer);
 
         post.grantPostId(uuidHolder);
@@ -49,15 +53,24 @@ public class PostService {
         return postRepository.findByOrderByIdDesc(pageable).map(PostListResponse::new);
     }
 
-    @Transactional(readOnly = true)
-    public PostDetailResponse getPost(String postId) {
+    @Transactional()
+    public PostDetailResponse getPost(String postId, Long userId) {
         Post post = getPostById(postId);
+        User user = getUserById(userId);
+
+        PostView view = post.view(user);
+        postViewRepository.save(view);
         return new PostDetailResponse(post);
+    }
+
+    private User getWriterById(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(InvalidWriterException::new);
     }
 
     private User getUserById(Long id){
         return userRepository.findById(id)
-                .orElseThrow(InvalidWriterException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     private Post getPostById(String postId){

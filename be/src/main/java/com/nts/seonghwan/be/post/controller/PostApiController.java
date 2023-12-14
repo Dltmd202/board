@@ -44,10 +44,11 @@ public class PostApiController {
 
     @GetMapping("/{postId}")
     public ResponseEntity<ApiResult<PostDetailResponse>> getPost(
-            @PathVariable String postId
+            @PathVariable String postId,
+            @SessionManagerAttribute Long userId
     ){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiUtils.success(postService.getPost(postId)));
+                .body(ApiUtils.success(postService.getPost(postId, userId)));
     }
 }
