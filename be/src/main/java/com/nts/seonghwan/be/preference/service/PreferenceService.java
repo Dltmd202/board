@@ -26,7 +26,6 @@ public class PreferenceService {
         User user = getUserById(userId);
         Post post = getPostById(postId);
         Preference preference = this.getPreferenceById(user, post, type);
-        System.out.println(preference);
 
         preference.toggle();
         Long count = this.preferenceRepository.countByPostAndTypeAndDeletedAtIsNull(post, type);
