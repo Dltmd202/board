@@ -22,7 +22,6 @@ public class PreferenceApiController {
             @RequestParam PreferenceType type,
             @SessionManagerAttribute Long userId
     ){
-        System.out.println(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiUtils.success(preferenceService.togglePreference(userId, postId, type)));
