@@ -102,7 +102,7 @@ class PostServiceTest extends ServiceTest {
         Post post = getDefaultPost("title", "content", user);
 
         // when
-        PostDetailResponse postDetail = postService.getPost(post.getPostId());
+        PostDetailResponse postDetail = postService.getPost(post.getPostId(), user.getId());
 
         // then
         assertThat(postDetail.getTitle()).isEqualTo("title");
@@ -120,7 +120,7 @@ class PostServiceTest extends ServiceTest {
         // when
         // then
         assertThatThrownBy(
-                () -> postService.getPost("abc")
+                () -> postService.getPost("abc", user.getId())
         ).isInstanceOf(NotFoundPostException.class);
     }
 }
