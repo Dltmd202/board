@@ -34,4 +34,10 @@ public class PostView {
     @Id @CreatedDate
     @Column(updatable = false, nullable = false)
     private LocalDate createdAt;
+
+    public PostView(Post post, User user) {
+        this.post = post;
+        this.user = user;
+        createdAt = LocalDate.now();
+    }
 }
