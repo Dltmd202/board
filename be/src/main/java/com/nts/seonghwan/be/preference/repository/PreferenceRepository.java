@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface PreferenceRepository extends JpaRepository<Preference, Long> {
+public interface PreferenceRepository extends JpaRepository<Preference, Long>, PreferenceCustomRepository {
     Optional<Preference> findByUserAndPostAndType(User user, Post post, PreferenceType type);
 
     Long countByPostAndTypeAndDeletedAtIsNull(Post post, PreferenceType type);
