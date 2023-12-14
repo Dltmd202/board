@@ -2,6 +2,7 @@ import Comment from "./Comment";
 import {useEffect, useState} from "react";
 import {postApi} from "../api/post";
 import {formatDate} from "../common/utils/dateUtils";
+import {preferenceApi} from "../api/preference";
 
 const PostDetail = ({postId}) => {
   const [post, setPost] = useState({});
@@ -21,6 +22,25 @@ const PostDetail = ({postId}) => {
     }
     getPost();
   }, []);
+
+  useEffect(() => {
+  }, [post]);
+
+  const onLikeButtonClick = async () => {
+    let response = await preferenceApi.like(postId);
+    setPost((prevPost) => ({
+      ...prevPost,
+      like: response.data.response,
+    }));
+  }
+
+  const onUnlikeButtonClick = async () => {
+    let response = await preferenceApi.unlike(postId);
+    setPost((prevPost) => ({
+      ...prevPost,
+      unlike: response.data.response,
+    }));
+  }
 
 
   return (
@@ -53,14 +73,20 @@ const PostDetail = ({postId}) => {
             </div>
             <div className="row">
               <div className="col-lg-4 col-sm-8 d-flex justify-content-start mb-3">
-                <button type="button" className="btn btn-outline-primary me-1">
+                <button
+                  onClick={onLikeButtonClick}
+                  type="button"
+                  className={`btn ${post.like?.ableToPreference ? 'btn-outline-primary' : 'btn-primary'} me-1`}>
                   <div className="d-flex">
-                    <p className="me-1">좋아요</p><p>100000</p>
+                    <p className="me-1">좋아요</p><p>{post.like?.count || 0}</p>
                   </div>
                 </button>
-                <button type="button" className="btn btn-danger">
+                <button
+                  onClick={onUnlikeButtonClick}
+                  type="button"
+                  className={`btn ${post.unlike?.ableToPreference ? 'btn-outline-danger' : 'btn-danger'}`}>
                   <div className="d-flex">
-                    <p className="me-1">싫어요</p><p>100000</p>
+                    <p className="me-1">싫어요</p>
                   </div>
                 </button>
               </div>
