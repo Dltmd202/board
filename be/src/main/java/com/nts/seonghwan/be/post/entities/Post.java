@@ -56,6 +56,10 @@ public class Post implements Serializable{
         this.tags = tags;
     }
 
+    public PostView view(User user){
+        return new PostView(this, user);
+    }
+
     public List<String> getTag(){
         return tags.stream()
                 .map(PostTag::getTag)
