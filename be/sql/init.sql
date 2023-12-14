@@ -37,3 +37,12 @@ create table post_tag(
     constraint foreign key (post_id) references post (id)
 );
 
+create table preference(
+    post_id bigint not null,
+    user_id bigint not null,
+    type varchar(20) not null,
+    primary key (post_id, type, user_id),
+    constraint foreign key (post_id) references post (id),
+    constraint foreign key (user_id) references user (id),
+    constraint check (type in ('LIKE', 'UNLIKE'))
+)
