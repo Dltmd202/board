@@ -3,10 +3,13 @@ import {useEffect, useState} from "react";
 import {postApi} from "../api/post";
 import {formatDate} from "../common/utils/dateUtils";
 import {preferenceApi} from "../api/preference";
+import Button from "./Button";
+import {useNavigate} from "react-router-dom";
 
 const PostDetail = ({postId}) => {
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -43,6 +46,11 @@ const PostDetail = ({postId}) => {
     }));
   }
 
+  const onClickDeleteButton = async () => {
+    await postApi.deletePost(postId);
+    navigate('/posts');
+  }
+
 
   return (
     <div>
@@ -51,8 +59,8 @@ const PostDetail = ({postId}) => {
         (
           <div>
             <div>
-              <div>
-                <h1 className="mb-4">{post.title}</h1>
+              <div className="d-flex">
+                <h2 className="text-break">{post.title}</h2>
                 <hr/>
               </div>
               <div>
@@ -91,6 +99,15 @@ const PostDetail = ({postId}) => {
                   </div>
                 </button>
               </div>
+              {post.owner && (
+                <div className="col-lg-8 col-sm-4 d-flex justify-content-end mb-3">
+                  <Button
+                    word="삭제하기"
+                    type="button"
+                    onClick={onClickDeleteButton}
+                    className="me-1" />
+                </div>
+                )}
               <hr/>
             </div>
             <div className="mb-3 d-flex">
