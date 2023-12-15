@@ -9,7 +9,6 @@ import com.nts.seonghwan.be.post.entities.PostView;
 import com.nts.seonghwan.be.post.exception.InvalidWriterException;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
 import com.nts.seonghwan.be.post.repository.PostRepository;
-import com.nts.seonghwan.be.post.repository.PostTagRepository;
 import com.nts.seonghwan.be.post.repository.PostViewRepository;
 import com.nts.seonghwan.be.preference.dto.PreferenceDto;
 import com.nts.seonghwan.be.preference.entities.PreferenceType;
@@ -38,7 +37,6 @@ public class PostService {
     private final PostViewRepository postViewRepository;
     private final PreferenceRepository preferenceRepository;
     private final CommentRepository commentRepository;
-    private final PostTagRepository postTagRepository;
 
     @Transactional()
     public PostCreateResponse savePost(PostCreateRequest postCreate, Long userId) {
@@ -46,11 +44,10 @@ public class PostService {
         Post post = postCreate.toEntity(writer);
 
         post.grantPostId(uuidHolder);
-        postTagRepository.saveAll(
-                postCreate.getTag().stream()
-                    .map(this::getOrDefault)
-                    .map(pt -> new PostTag(post, pt))
-                    .toList());
+        post.tag(postCreate.getTag().stream()
+                .map(this::getOrDefault)
+                .map(pt -> new PostTag(post, pt))
+                .toList());
 
         Post savePost = postRepository.save(post);
         return PostCreateResponse.from(savePost);
@@ -97,9 +94,7 @@ public class PostService {
         Post post = getPostById(postId);
         validatePostUser(post, userId);
 
-        postTagRepository.deleteAll(post.getTags());
-        postTagRepository.saveAll(
-                postUpdateRequest.getTag().stream()
+        post.tag(postUpdateRequest.getTag().stream()
                         .map(this::getOrDefault)
                         .map(pt -> new PostTag(post, pt))
                         .toList());
