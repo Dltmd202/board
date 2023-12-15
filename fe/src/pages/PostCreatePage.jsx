@@ -27,6 +27,11 @@ const PostCreatePage = () => {
           </ol>
         </nav>
         <PostEditor
+          defaultPost={{
+              title: '',
+              content: '',
+              tag: [],
+            }}
           onSubmit={onPostSubmit}/>
       </Container>
     </div>
