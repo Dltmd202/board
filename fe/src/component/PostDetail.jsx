@@ -51,6 +51,10 @@ const PostDetail = ({postId}) => {
     navigate('/posts');
   }
 
+  const onClickEditButton = async () => {
+    navigate(`/posts/${postId}/edit`);
+  }
+
 
   return (
     <div>
@@ -105,6 +109,11 @@ const PostDetail = ({postId}) => {
                     word="삭제하기"
                     type="button"
                     onClick={onClickDeleteButton}
+                    className="me-1" />
+                  <Button
+                    word="수정하기"
+                    type="button"
+                    onClick={onClickEditButton}
                     className="me-1" />
                 </div>
                 )}
