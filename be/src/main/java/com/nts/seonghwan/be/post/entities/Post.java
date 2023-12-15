@@ -1,6 +1,8 @@
 package com.nts.seonghwan.be.post.entities;
 
+import com.nts.seonghwan.be.comment.entities.Comment;
 import com.nts.seonghwan.be.common.service.UUIDHolder;
+import com.nts.seonghwan.be.preference.entities.Preference;
 import com.nts.seonghwan.be.tag.entities.Tag;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.AllArgsConstructor;
@@ -45,11 +47,17 @@ public class Post implements Serializable{
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostTag> tags;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostView> views;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Preference> preferences;
 
     public void grantPostId(UUIDHolder uuidHolder){
         this.postId = uuidHolder.uuid();
