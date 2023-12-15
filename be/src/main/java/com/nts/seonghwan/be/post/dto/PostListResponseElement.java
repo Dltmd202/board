@@ -1,6 +1,5 @@
 package com.nts.seonghwan.be.post.dto;
 
-import com.nts.seonghwan.be.post.entities.Post;
 import lombok.Getter;
 
 import java.time.Duration;
@@ -16,17 +15,6 @@ public class PostListResponseElement {
     private long likeCount;
     private long commentCount;
     private long viewCount;
-
-    public PostListResponseElement(Post post, Long viewCount, Long commentCount, Long likeCount){
-        this.postId = post.getPostId();
-        this.title = post.getTitle();
-        this.user = post.getUser().getEmail();
-        this.createdAt = post.getCreatedAt().toString();
-        this.recent = isRecent(post.getCreatedAt());
-        this.likeCount = likeCount;
-        this.commentCount = commentCount;
-        this.viewCount = viewCount;
-    }
 
     public PostListResponseElement(String postId, String title, String user, LocalDateTime createdAt, long viewCount, long commentCount, long likeCount){
         this.postId = postId;
