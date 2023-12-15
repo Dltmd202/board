@@ -12,4 +12,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findAllByPost(Post post, Pageable pageable);
 
     Optional<Comment> findByIdAndPostPostId(Long commentId, String postId);
+
+    Long countByPostPostIdAndDeletedAtIsNull(String postId);
+
+    Long countByDeletedAtIsNull();
 }
