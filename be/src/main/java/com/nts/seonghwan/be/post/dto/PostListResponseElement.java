@@ -1,14 +1,12 @@
 package com.nts.seonghwan.be.post.dto;
 
 import com.nts.seonghwan.be.post.entities.Post;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
 public class PostListResponseElement {
     private String postId;
     private String title;
@@ -25,6 +23,17 @@ public class PostListResponseElement {
         this.user = post.getUser().getEmail();
         this.createdAt = post.getCreatedAt().toString();
         this.recent = isRecent(post.getCreatedAt());
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
+        this.viewCount = viewCount;
+    }
+
+    public PostListResponseElement(String postId, String title, String user, LocalDateTime createdAt, long viewCount, long commentCount, long likeCount){
+        this.postId = postId;
+        this.title = title;
+        this.user = user;
+        this.createdAt = createdAt.toString();
+        this.recent = isRecent(createdAt);
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.viewCount = viewCount;
