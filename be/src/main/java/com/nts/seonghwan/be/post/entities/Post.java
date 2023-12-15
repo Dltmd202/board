@@ -1,6 +1,8 @@
 package com.nts.seonghwan.be.post.entities;
 
+import com.nts.seonghwan.be.comment.entities.Comment;
 import com.nts.seonghwan.be.common.service.UUIDHolder;
+import com.nts.seonghwan.be.preference.entities.Preference;
 import com.nts.seonghwan.be.tag.entities.Tag;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -23,7 +27,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Post {
+public class Post implements Serializable{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -44,15 +48,29 @@ public class Post {
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<PostTag> tags;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<PostTag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostView> views = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Preference> preferences = new ArrayList<>();
 
     public void grantPostId(UUIDHolder uuidHolder){
         this.postId = uuidHolder.uuid();
     }
 
-    public void tag(List<PostTag> tags){
-        this.tags = tags;
+    public PostView view(User user){
+        return new PostView(this, user);
+    }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
     }
 
     public List<String> getTag(){

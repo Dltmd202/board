@@ -2,7 +2,7 @@ import Input from "./Input";
 import Button from "./Button";
 import {useEffect, useState} from "react";
 
-const PostEditor = ({onSubmit}) => {
+const PostEditor = ({defaultPost, onSubmit}) => {
   const [post, setPost] = useState({
     title: '',
     content: '',
@@ -10,6 +10,10 @@ const PostEditor = ({onSubmit}) => {
   })
   const [tagString, setTagString] = useState('');
   const [availableSubmit, setAvailableSubmit] = useState(false);
+
+  useEffect(() => {
+    setPost(defaultPost);
+  }, [defaultPost]);
 
   useEffect(() => {
     setAvailableSubmit(0 < post.title.length && post.content.length < 255);
@@ -72,9 +76,13 @@ const PostEditor = ({onSubmit}) => {
 
   return (
     <div>
-      <Input label="제목" onInput={onTitleChange}/>
+      <Input
+        value={post.title}
+        label="제목"
+        onInput={onTitleChange}/>
       <label>내용</label>
       <textarea
+        value={post.content}
         onInput={onContentChange}
         className="form-control mb-3"
         rows="10"/>

@@ -6,6 +6,8 @@ import {formatDate} from "../common/utils/dateUtils";
 const PostList = () => {
   const navigate = useNavigate();
   const [totalPage, setTotalPage] = useState(0);
+  const [totalPostCount, setTotalPostCount] = useState(0);
+  const [totalCommentCount, setTotalCommentCount] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -17,8 +19,10 @@ const PostList = () => {
       setLoading(true);
       try {
         const postResponse = await postApi.getPosts(page);
-        setPosts(postResponse.data.response.content);
-        setTotalPage(postResponse.data.response.totalPages);
+        setPosts(postResponse.data.response.posts.content);
+        setTotalPage(postResponse.data.response.posts.totalPages);
+        setTotalCommentCount(postResponse.data.response.totalCommentCount);
+        setTotalPostCount(postResponse.data.response.posts.totalElements);
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -35,7 +39,19 @@ const PostList = () => {
 
   return (
     <div>
-      <h1 className="mb-2">게시판</h1>
+      <div className="d-flex justify-content-between">
+        <h1 className="mb-2">게시판</h1>
+        <div className="w-25">
+          <div className="d-flex justify-content-between">
+            <p>전체 게시글 개수:</p>
+            <p>{totalPostCount}</p>
+          </div>
+          <div className="d-flex justify-content-between">
+            <p>전체 댓글 개수:</p>
+            <p>{totalCommentCount}</p>
+          </div>
+        </div>
+      </div>
       <table className="table table-hover">
         <thead className="table-light">
         <tr>
@@ -78,7 +94,7 @@ const PostListItem = ({
                         post,
                         onItemClick
 }) => {
-  const {title, user, createdAt, postId} = post;
+  const {title, user, createdAt, postId, recent, likeCount, commentCount, viewCount} = post;
 
   const onClick = () => {
     onItemClick(postId);
@@ -94,12 +110,14 @@ const PostListItem = ({
 
   return (
     <tr onClick={onClick}>
-      <td>{truncateString(title, 10)}</td>
+      <td>
+        { recent && <span className="badge bg-secondary me-1">New</span> }
+        {truncateString(title, 10)}</td>
       <td>{truncateString(user, 15)}</td>
       <td>{formatDate(createdAt)}</td>
-      <td>3</td>
-      <td>3</td>
-      <td>1000</td>
+      <td>{commentCount}</td>
+      <td>{likeCount}</td>
+      <td>{viewCount}</td>
     </tr>
   )
 }
