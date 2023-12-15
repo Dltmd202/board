@@ -49,8 +49,7 @@ create table preference(
     constraint unique (post_id, type, user_id)
 );
 
-create table post_view
-(
+create table post_view(
     post_id    bigint not null,
     user_id    bigint not null,
     created_at date   not null,

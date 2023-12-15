@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:8.0.34
+    container_name: nts-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: nts
+    volumes:
+      - ./be/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+
+  be:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    container_name: be
+    environment:
+      spring.profiles.active: dev
+      spring.datasource.url: jdbc:mysql://nts-mysql:3306/nts
+      spring.datasource.username: root
+      spring.datasource.password: 1234
+      cors.allowedOrigins[0]: http://localhost
+      cors.allowedOrigins[1]: http://127.0.0.1
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+
+  fe:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    container_name: fe
+    environment:
+      REACT_APP_API_END_POINT: http://127.0.0.1:8081
+    ports:
+      - "80:3000"
+    depends_on:
+      - be
