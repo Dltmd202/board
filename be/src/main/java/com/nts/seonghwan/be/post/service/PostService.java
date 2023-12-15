@@ -79,7 +79,7 @@ public class PostService {
         PreferenceDto like = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
         PreferenceDto unlike = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
 
-        return new PostDetailResponse(post, viewCount, like, unlike);
+        return new PostDetailResponse(post, viewCount, like, unlike, user);
     }
 
     @Transactional()
