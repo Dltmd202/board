@@ -48,6 +48,18 @@ public class PostApiController {
                 .body(ApiUtils.success(postService.getPost(postId, userId)));
     }
 
+    @PutMapping("/{postId}")
+    public ResponseEntity<ApiResult<Void>> updatePost(
+            @PathVariable String postId,
+            @Validated @RequestBody PostUpdateRequest postUpdateRequest,
+            @SessionManagerAttribute Long userId
+    ){
+        postService.updatePost(postId, postUpdateRequest, userId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiUtils.success(null));
+    }
+
     @DeleteMapping("/{postId}")
     public ResponseEntity<ApiResult<Void>> deletePost(
             @PathVariable String postId,
