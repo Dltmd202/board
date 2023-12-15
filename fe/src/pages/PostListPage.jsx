@@ -11,7 +11,7 @@ const PostListPage = () => {
       <Container className="pt-5">
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link to="/posts">게시판</Link></li>
+            <li className="breadcrumb-item"><Link to="/">게시판</Link></li>
           </ol>
         </nav>
         <PostList/>
