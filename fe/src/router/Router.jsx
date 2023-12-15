@@ -5,17 +5,24 @@ import PostListPage from "../pages/PostListPage";
 import PostDetailPage from "../pages/PostDetailPage";
 import PostCreatePage from "../pages/PostCreatePage";
 import PostEditPage from "../pages/PostEditPage";
+import PrivateRouter from "./PrivateRouter";
+import PublicRouter from "./PublicRouter";
 
 const Routers = () => {
   return(
     <BrowserRouter>
       <Routes>
-        <Route path="/join" element={<JoinPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/posts" element={<PostListPage />} />
-        <Route path="/posts/:postId" element={<PostDetailPage />} />
-        <Route path="/posts/create" element={<PostCreatePage />} />
-        <Route path="/posts/:postId/edit" element={<PostEditPage />} />
+        <Route element={<PublicRouter restricted={true}/>}>
+          <Route path="/join" element={<JoinPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
+
+        <Route element={<PrivateRouter />}>
+          <Route path="/posts" element={<PostListPage />} />
+          <Route path="/posts/:postId" element={<PostDetailPage />} />
+          <Route path="/posts/create" element={<PostCreatePage />} />
+          <Route path="/posts/:postId/edit" element={<PostEditPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
