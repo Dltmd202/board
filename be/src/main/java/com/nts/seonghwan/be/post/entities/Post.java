@@ -16,6 +16,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -47,28 +48,29 @@ public class Post implements Serializable{
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostTag> tags;
+    @OneToMany(mappedBy = "post")
+    private List<PostTag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostView> views;
+    private List<PostView> views = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Preference> preferences;
+    private List<Preference> preferences = new ArrayList<>();
 
     public void grantPostId(UUIDHolder uuidHolder){
         this.postId = uuidHolder.uuid();
     }
 
-    public void tag(List<PostTag> tags){
-        this.tags = tags;
-    }
-
     public PostView view(User user){
         return new PostView(this, user);
+    }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
     }
 
     public List<String> getTag(){
