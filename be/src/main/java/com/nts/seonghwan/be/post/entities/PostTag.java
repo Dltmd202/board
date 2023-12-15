@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.Objects;
+
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.*;
 
@@ -27,4 +29,18 @@ public class PostTag {
     @Id @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PostTag postTag = (PostTag) o;
+        return Objects.equals(post.getId(), postTag.post.getId())
+                && Objects.equals(tag.getName(), postTag.tag.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(post, tag);
+    }
 }

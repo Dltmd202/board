@@ -17,7 +17,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -48,8 +50,8 @@ public class Post implements Serializable{
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<PostTag> tags = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final Set<PostTag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostView> views = new ArrayList<>();
@@ -62,6 +64,13 @@ public class Post implements Serializable{
 
     public void grantPostId(UUIDHolder uuidHolder){
         this.postId = uuidHolder.uuid();
+    }
+
+    public void tag(List<PostTag> postTags){
+        Set<PostTag> difference = new HashSet<>(this.tags);
+        postTags.forEach(difference::remove);
+        this.tags.removeAll(difference);
+        this.tags.addAll(postTags);
     }
 
     public PostView view(User user){
