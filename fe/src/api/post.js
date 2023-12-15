@@ -5,4 +5,5 @@ export const postApi =  {
     getPost: (postId) => { return authRequest.get(`/api/v1/posts/${postId}`) },
     createPost: (post) => { return authRequest.post(`/api/v1/posts`, post) },
     deletePost: (postId) => { return authRequest.delete(`/api/v1/posts/${postId}`) },
+    editPost: (postId, post) => { return authRequest.put(`/api/v1/posts/${postId}`, post) },
 }
