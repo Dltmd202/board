@@ -2,6 +2,7 @@ package com.nts.seonghwan.be.post.dto;
 
 import com.nts.seonghwan.be.post.entities.Post;
 import com.nts.seonghwan.be.preference.dto.PreferenceDto;
+import com.nts.seonghwan.be.user.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,8 +20,10 @@ public class PostDetailResponse {
     private Long viewCount;
     private PreferenceDto like;
     private PreferenceDto dislike;
+    private boolean isOwner;
 
-    public PostDetailResponse(Post post, Long viewCount, PreferenceDto like, PreferenceDto dislike){
+
+    public PostDetailResponse(Post post, Long viewCount, PreferenceDto like, PreferenceDto dislike, User user){
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
@@ -30,5 +33,6 @@ public class PostDetailResponse {
         this.viewCount = viewCount;
         this.like = like;
         this.dislike = dislike;
+        this.isOwner = post.getUser().getId().equals(user.getId());
     }
 }
