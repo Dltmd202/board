@@ -55,13 +55,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostListResponse findPost(Pageable pageable){
-        Page<PostListResponseElement> posts = postRepository.findByOrderByIdDesc(pageable)
-                .map(p -> {
-                    Long viewCount = postViewRepository.countByPostPostId(p.getPostId());
-                    Long commentCount = commentRepository.countByPostPostIdAndDeletedAtIsNull(p.getPostId());
-                    Long likeCount = preferenceRepository.countByPostAndTypeAndDeletedAtIsNull(p, PreferenceType.LIKE);
-                    return new PostListResponseElement(p, viewCount, commentCount, likeCount);
-                });
+        Page<PostListResponseElement> posts = postRepository.findPostListByUserId(pageable);
         long commentCount = commentRepository.countByDeletedAtIsNull();
         return new PostListResponse(posts, commentCount);
     }
