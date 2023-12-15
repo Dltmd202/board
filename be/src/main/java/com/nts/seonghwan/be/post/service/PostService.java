@@ -16,6 +16,7 @@ import com.nts.seonghwan.be.preference.repository.PreferenceRepository;
 import com.nts.seonghwan.be.tag.entities.Tag;
 import com.nts.seonghwan.be.tag.repository.TagRepository;
 import com.nts.seonghwan.be.user.entities.User;
+import com.nts.seonghwan.be.user.exception.ForbiddenUserAccessException;
 import com.nts.seonghwan.be.user.exception.UserNotFoundException;
 import com.nts.seonghwan.be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +80,19 @@ public class PostService {
         PreferenceDto unlike = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
 
         return new PostDetailResponse(post, viewCount, like, unlike);
+    }
+
+    @Transactional()
+    public void deletePost(String postId, Long userId) {
+        Post post = getPostById(postId);
+        validatePostUser(post, userId);
+
+        postRepository.delete(post);
+    }
+
+    private void validatePostUser(Post post, Long userId){
+        if(!Objects.equals(post.getUser().getId(), userId))
+            throw new ForbiddenUserAccessException();
     }
 
     private User getWriterById(Long id){
