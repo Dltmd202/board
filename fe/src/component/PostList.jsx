@@ -15,20 +15,26 @@ const PostList = () => {
   const [page, setPage] = useState(1);
   const titleStyle = {minWidth: '200px'};
 
-  useEffect( () => {
-    const getPostList = async () => {
-      setLoading(true);
-      try {
-        const postResponse = await postApi.getPosts(page);
-        setPosts(postResponse.data.response.posts.content);
-        setTotalPage(postResponse.data.response.posts.totalPages);
-        setTotalCommentCount(postResponse.data.response.totalCommentCount);
-        setTotalPostCount(postResponse.data.response.posts.totalElements);
-        setLoading(false);
-      } catch (e) {
-        console.log(e);
-      }
+  const getPostList = async () => {
+    try {
+      const postResponse = await postApi.getPosts(page);
+      setPosts(postResponse.data.response.posts.content);
+      setTotalPage(postResponse.data.response.posts.totalPages);
+      setTotalCommentCount(postResponse.data.response.totalCommentCount);
+      setTotalPostCount(postResponse.data.response.posts.totalElements);
+    } catch (e) {
+      console.log(e);
     }
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    getPostList();
+    setLoading(false);
+  }, []);
+
+
+  useEffect( () => {
     getPostList();
   }, [page]);
 
@@ -59,9 +65,9 @@ const PostList = () => {
         {!loading ? posts.map((p, i) =>
           <PostListItem post={p} onItemClick={handlePostItemClick} key={i}/>
         ) : (
-          <tr>
-            <td colSpan="6" className="text-center">Loading...</td>
-          </tr>
+          <div className="spinner-border m-5" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         )}
         </tbody>
       </table>
