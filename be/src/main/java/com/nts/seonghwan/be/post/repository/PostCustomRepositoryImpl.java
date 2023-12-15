@@ -27,8 +27,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         "order by p.id desc";
 
         TypedQuery<PostListResponseElement> query = em.createQuery(jpql, PostListResponseElement.class);
-        System.out.println(pageable);
-        query.setFirstResult(pageable.getPageNumber());
+        query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
         query.setMaxResults(pageable.getPageSize());
         return new PageImpl<>(query.getResultList(), pageable, getTotalCount());
     }
