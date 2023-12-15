@@ -31,11 +31,12 @@ public class PostApiController {
 
     @GetMapping
     public ResponseEntity<ApiResult<PostListResponse>> getPost(
-            Pageable pageable
+            Pageable pageable,
+            @ModelAttribute PostSearch postSearch
     ){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiUtils.success(postService.findPost(pageable)));
+                .body(ApiUtils.success(postService.findPost(pageable, postSearch)));
     }
 
     @GetMapping("/{postId}")

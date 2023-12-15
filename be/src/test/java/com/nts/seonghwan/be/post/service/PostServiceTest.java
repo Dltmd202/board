@@ -73,7 +73,8 @@ class PostServiceTest extends ServiceTest {
 
         // when
         Pageable pageRequest = PageRequest.of(0, 10);
-        PostListResponse post = postService.findPost(pageRequest);
+        PostSearch postSearch = new PostSearch();
+        PostListResponse post = postService.findPost(pageRequest, postSearch);
 
         // then
         assertThat(post.getPosts().getTotalElements()).isEqualTo(4);
@@ -88,7 +89,8 @@ class PostServiceTest extends ServiceTest {
         // given
         // when
         Pageable pageRequest = PageRequest.of(0, 10);
-        PostListResponse post = postService.findPost(pageRequest);
+        PostSearch postSearch = new PostSearch();
+        PostListResponse post = postService.findPost(pageRequest, postSearch);
 
         // then
         assertThat(post.getPosts().getTotalElements()).isEqualTo(0);
