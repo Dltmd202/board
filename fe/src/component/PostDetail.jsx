@@ -48,11 +48,11 @@ const PostDetail = ({postId}) => {
 
   const onClickDeleteButton = async () => {
     await postApi.deletePost(postId);
-    navigate('/posts');
+    navigate('/');
   }
 
   const onClickEditButton = async () => {
-    navigate(`/posts/${postId}/edit`);
+    navigate(`/${postId}/edit`);
   }
 
 

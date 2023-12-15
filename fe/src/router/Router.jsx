@@ -18,10 +18,10 @@ const Routers = () => {
         </Route>
 
         <Route element={<PrivateRouter />}>
-          <Route path="/posts" element={<PostListPage />} />
-          <Route path="/posts/:postId" element={<PostDetailPage />} />
-          <Route path="/posts/create" element={<PostCreatePage />} />
-          <Route path="/posts/:postId/edit" element={<PostEditPage />} />
+          <Route path="/" element={<PostListPage />} />
+          <Route path="/:postId" element={<PostDetailPage />} />
+          <Route path="/create" element={<PostCreatePage />} />
+          <Route path="/:postId/edit" element={<PostEditPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
