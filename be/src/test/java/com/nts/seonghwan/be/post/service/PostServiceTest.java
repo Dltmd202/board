@@ -8,6 +8,7 @@ import com.nts.seonghwan.be.service.ServiceTest;
 import com.nts.seonghwan.be.user.entities.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -71,21 +72,23 @@ class PostServiceTest extends ServiceTest {
         getDefaultPost("title4", "content4", user2);
 
         // when
-        PostListResponse post = postService.findPost(Pageable.unpaged());
+        Pageable pageRequest = PageRequest.of(0, 10);
+        PostListResponse post = postService.findPost(pageRequest);
 
         // then
         assertThat(post.getPosts().getTotalElements()).isEqualTo(4);
-        assertThat(post.getPosts().getContent().get(0).getTitle()).isEqualTo("title1");
-        assertThat(post.getPosts().getContent().get(0).getUser()).isEqualTo("abc123@abc.com");
-        assertThat(post.getPosts().getContent().get(3).getTitle()).isEqualTo("title4");
-        assertThat(post.getPosts().getContent().get(3).getUser()).isEqualTo("abc124@abc.com");
+        assertThat(post.getPosts().getContent().get(0).getTitle()).isEqualTo("title4");
+        assertThat(post.getPosts().getContent().get(0).getUser()).isEqualTo("abc124@abc.com");
+        assertThat(post.getPosts().getContent().get(3).getTitle()).isEqualTo("title1");
+        assertThat(post.getPosts().getContent().get(3).getUser()).isEqualTo("abc123@abc.com");
     }
 
     @Test
     void findPost는_게시글이_없어도_호출할_수_있다() {
         // given
         // when
-        PostListResponse post = postService.findPost(Pageable.unpaged());
+        Pageable pageRequest = PageRequest.of(0, 10);
+        PostListResponse post = postService.findPost(pageRequest);
 
         // then
         assertThat(post.getPosts().getTotalElements()).isEqualTo(0);
