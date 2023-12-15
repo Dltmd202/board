@@ -54,8 +54,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostListResponse findPost(Pageable pageable){
-        Page<PostListResponseElement> posts = postRepository.findPostListByUserId(pageable);
+    public PostListResponse findPost(Pageable pageable, PostSearch postSearch){
+        Page<PostListResponseElement> posts = postRepository.findPostListByUserId(pageable, postSearch);
         long commentCount = commentRepository.countByDeletedAtIsNull();
         return new PostListResponse(posts, commentCount);
     }
