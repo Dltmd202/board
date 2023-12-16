@@ -47,7 +47,7 @@ public class ServiceTest {
                 .email(email)
                 .password(password)
                 .build();
-        prevUser.encryptPassword(passwordEncoder);
+        prevUser.signup(passwordEncoder);
         em.persist(prevUser);
         return prevUser;
     }
