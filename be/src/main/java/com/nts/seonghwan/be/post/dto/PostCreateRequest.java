@@ -35,4 +35,11 @@ public class PostCreateRequest {
                 .user(writer)
                 .build();
     }
+
+    public List<String> getTag() {
+        return tag.stream()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+    }
 }
