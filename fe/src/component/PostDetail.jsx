@@ -23,6 +23,8 @@ const PostDetail = ({postId}) => {
         setPost(post.data.response);
         setLoading(false);
       } catch (e){
+        alert('게시글을 불러오는데 실패했습니다.');
+        navigate('/');
         console.log(e);
       }
     }
