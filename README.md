@@ -27,3 +27,5 @@ http://localhost
 
 #### [ERD 페이지](https://dbdiagram.io/d/6572df2356d8064ca0a3ad9c)
 ![img.png](./resource/img.png)
+
+#### [기능 시연 화면](./execute.md)
