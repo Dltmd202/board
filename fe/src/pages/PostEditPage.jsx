@@ -26,7 +26,13 @@ const PostEditPage = () => {
           title: response.data.response.title,
           tag: response.data.response.tag,
         });
+        if(!response.data.response.owner){
+          alert('수정 권한이 없습니다.');
+          navigate('/');
+        }
       } catch (e){
+        alert('게시글을 불러오는데 실패했습니다.');
+        navigate('/');
         console.log(e);
       }
     }
@@ -52,7 +58,7 @@ const PostEditPage = () => {
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item"><Link to="/">게시판</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">생성</li>
+            <li className="breadcrumb-item active" aria-current="page">수정</li>
           </ol>
         </nav>
         {
