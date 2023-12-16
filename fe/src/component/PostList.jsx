@@ -3,8 +3,10 @@ import {useEffect, useState} from "react";
 import {postApi} from "../api/post";
 import {formatDate} from "../common/utils/dateUtils";
 import Button from "./Button";
+import Form from 'react-bootstrap/Form';
+import {Dropdown, DropdownButton, InputGroup} from "react-bootstrap";
 
-const PostList = () => {
+const PostList = ({searchCondition, searchQuery}) => {
   const navigate = useNavigate();
   const [totalPage, setTotalPage] = useState(0);
   const [totalPostCount, setTotalPostCount] = useState(0);
@@ -13,11 +15,15 @@ const PostList = () => {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
+
+  const [searchType, setSearchType] = useState('title');
+  const [searchString, setSearchString] = useState('');
+
   const titleStyle = {minWidth: '200px'};
 
   const getPostList = async () => {
     try {
-      const postResponse = await postApi.getPosts(page);
+      const postResponse = await postApi.getPosts(page, searchCondition, searchQuery);
       setPosts(postResponse.data.response.posts.content);
       setTotalPage(postResponse.data.response.posts.totalPages);
       setTotalCommentCount(postResponse.data.response.totalCommentCount);
@@ -29,26 +35,34 @@ const PostList = () => {
 
   useEffect(() => {
     setLoading(true);
+    setPage(1);
     getPostList();
     setLoading(false);
-  }, []);
-
+  }, [searchCondition, searchQuery]);
 
   useEffect( () => {
     getPostList();
-  }, [page]);
+  }, [page, searchCondition, searchQuery]);
 
-
+  const onChangeSearchType = (type) => {
+    setSearchType(type);
+  }
 
   const handlePostItemClick = (postId) => {
     navigate(`/${postId}`);
+  }
+
+  const onClickSearch = (e) => {
+    navigate(`/?${searchType}=${searchString}`)
   }
 
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center">
         <h1 className="mb-2">게시판</h1>
-        <Button word="글쓰기" onClick={() => navigate('/create')}/>
+        <div className="d-flex align-items-center">
+          <Button word="글쓰기" onClick={() => navigate('/create')}/>
+        </div>
       </div>
       <table className="table table-hover">
         <thead className="table-light">
@@ -84,7 +98,30 @@ const PostList = () => {
             </li>
           </ul>
         </nav>
-        <div className="w-25">
+        <div className={"w-50"}>
+          <div className="d-flex align-items-center justify-content-end">
+            <InputGroup className="me-2 w-75">
+              <DropdownButton
+                variant="outline-secondary"
+                title={searchType}
+                id="input-group-dropdown-1"
+              >
+                <Dropdown.Item onClick={() => onChangeSearchType("title")}>title</Dropdown.Item>
+                <Dropdown.Item onClick={() => onChangeSearchType("content")}>content</Dropdown.Item>
+                <Dropdown.Item onClick={() => onChangeSearchType("writer")}>writer</Dropdown.Item>
+                <Dropdown.Item onClick={() => onChangeSearchType("tag")}>tag</Dropdown.Item>
+              </DropdownButton>
+              <Form.Control
+                onInput={e => setSearchString(e.target.value)}
+                value={searchString}
+                aria-label="Text input with dropdown button"
+              />
+            </InputGroup>
+            <Button
+              onClick={onClickSearch}
+              className={"w-auto"}
+              word={"검색"}/>
+          </div>
           <div className="d-flex justify-content-end">
             <p className="me-2">전체 게시글 개수:</p>
             <p>{totalPostCount}</p>

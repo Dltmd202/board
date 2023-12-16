@@ -55,6 +55,10 @@ const PostDetail = ({postId}) => {
     navigate(`/${postId}/edit`);
   }
 
+  const onTagClick = (tag) => {
+    navigate(`/?tag=${tag}`, {replace: true});
+  }
+
 
   return (
     <div>
@@ -121,7 +125,10 @@ const PostDetail = ({postId}) => {
             </div>
             <div className="mb-3 d-flex">
               {post.tag.map((tag, index) =>
-                <button key={index} className="me-2 btn btn-primary d-flex">
+                <button
+                  onClick={() => onTagClick(tag)}
+                  key={index}
+                  className="me-2 btn btn-primary d-flex">
                   <span>#{tag}</span>
                 </button>
               )}
