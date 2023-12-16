@@ -38,11 +38,6 @@ const PostEditor = ({defaultPost, onSubmit}) => {
     setTagString('')
   }, [post.tag]);
 
-
-  useEffect(() => {
-    console.log(post);
-  }, [post]);
-
   const onSubmitPost = async () => {
     onSubmit(post);
   }

@@ -21,13 +21,11 @@ const PostEditPage = () => {
       try {
         setLoading(true);
         const response = await postApi.getPost(postId);
-        console.log(response.data.response)
         setDefaultPost({
           content: response.data.response.content,
           title: response.data.response.title,
           tag: response.data.response.tag,
         });
-        console.log(defaultPost);
       } catch (e){
         console.log(e);
       }
