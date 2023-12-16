@@ -26,7 +26,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    public void encryptPassword(PasswordEncoder encoder){
+    public void signup(PasswordEncoder encoder){
         this.password = encoder.encode(password);
     }
 
