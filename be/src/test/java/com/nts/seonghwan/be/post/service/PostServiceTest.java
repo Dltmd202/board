@@ -58,7 +58,8 @@ class PostServiceTest extends ServiceTest {
         // then
         assertThat(postCreateResponse.getTitle()).isEqualTo("title");
         assertThat(postCreateResponse.getContent()).isEqualTo("content");
-        assertThat(postCreateResponse.getTag()).isEqualTo(tag);
+        assertThat(postCreateResponse.getTag()).contains(tag.get(0));
+        assertThat(postCreateResponse.getTag()).contains(tag.get(1));
     }
 
     @Test

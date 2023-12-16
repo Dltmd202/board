@@ -4,8 +4,6 @@ import com.nts.seonghwan.be.comment.repository.CommentRepository;
 import com.nts.seonghwan.be.common.service.UUIDHolder;
 import com.nts.seonghwan.be.post.dto.*;
 import com.nts.seonghwan.be.post.entities.Post;
-import com.nts.seonghwan.be.post.entities.PostTag;
-import com.nts.seonghwan.be.post.entities.PostView;
 import com.nts.seonghwan.be.post.exception.InvalidWriterException;
 import com.nts.seonghwan.be.post.exception.NotFoundPostException;
 import com.nts.seonghwan.be.post.repository.PostRepository;
@@ -13,8 +11,8 @@ import com.nts.seonghwan.be.post.repository.PostViewRepository;
 import com.nts.seonghwan.be.preference.dto.PreferenceDto;
 import com.nts.seonghwan.be.preference.entities.PreferenceType;
 import com.nts.seonghwan.be.preference.repository.PreferenceRepository;
-import com.nts.seonghwan.be.tag.entities.Tag;
-import com.nts.seonghwan.be.tag.repository.TagRepository;
+import com.nts.seonghwan.be.post.entities.Tag;
+import com.nts.seonghwan.be.post.repository.TagRepository;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.exception.ForbiddenUserAccessException;
 import com.nts.seonghwan.be.user.exception.UserNotFoundException;
@@ -46,7 +44,6 @@ public class PostService {
         post.grantPostId(uuidHolder);
         post.tag(postCreate.getTag().stream()
                 .map(this::getOrDefault)
-                .map(pt -> new PostTag(post, pt))
                 .toList());
 
         Post savePost = postRepository.save(post);
@@ -64,15 +61,9 @@ public class PostService {
     public PostDetailResponse getPost(String postId, Long userId) {
         Post post = getPostById(postId);
         User user = getUserById(userId);
+        post.view(user);
 
-        PostView view = post.view(user);
-        postViewRepository.save(view);
-
-        Long viewCount = postViewRepository.countByPostPostId(postId);
-        PreferenceDto like = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
-        PreferenceDto unlike = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.UNLIKE);
-
-        return new PostDetailResponse(post, viewCount, like, unlike, user);
+        return buildPostDetail(postId, post, user);
     }
 
     @Transactional()
@@ -90,10 +81,18 @@ public class PostService {
 
         post.tag(postUpdateRequest.getTag().stream()
                         .map(this::getOrDefault)
-                        .map(pt -> new PostTag(post, pt))
                         .toList());
 
         post.update(postUpdateRequest.getTitle(), postUpdateRequest.getContent());
+    }
+
+    private PostDetailResponse buildPostDetail(String postId, Post post, User user) {
+        Long viewCount = postViewRepository.countByPostPostId(postId);
+        PreferenceDto like = preferenceRepository
+                .findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
+        PreferenceDto unlike = preferenceRepository
+                .findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.UNLIKE);
+        return new PostDetailResponse(post, viewCount, like, unlike, user);
     }
 
     private void validatePostUser(Post post, Long userId){
