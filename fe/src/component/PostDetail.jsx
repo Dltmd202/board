@@ -12,6 +12,9 @@ const PostDetail = ({postId}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+  }, [post]);
+
+  useEffect(() => {
 
     const getPost = async () => {
       try {
@@ -20,15 +23,13 @@ const PostDetail = ({postId}) => {
         setPost(post.data.response);
         setLoading(false);
       } catch (e){
+        alert('게시글을 불러오는데 실패했습니다.');
+        navigate('/');
         console.log(e);
       }
     }
     getPost();
   }, []);
-
-  useEffect(() => {
-    console.log(post);
-  }, [post]);
 
   const onLikeButtonClick = async () => {
     let response = await preferenceApi.like(postId);
@@ -48,11 +49,15 @@ const PostDetail = ({postId}) => {
 
   const onClickDeleteButton = async () => {
     await postApi.deletePost(postId);
-    navigate('/posts');
+    navigate('/');
   }
 
   const onClickEditButton = async () => {
-    navigate(`/posts/${postId}/edit`);
+    navigate(`/${postId}/edit`);
+  }
+
+  const onTagClick = (tag) => {
+    navigate(`/?tag=${tag}`, {replace: true});
   }
 
 
@@ -99,7 +104,7 @@ const PostDetail = ({postId}) => {
                   type="button"
                   className={`btn ${post.unlike?.ableToPreference ? 'btn-outline-danger' : 'btn-danger'}`}>
                   <div className="d-flex">
-                    <p className="me-1">싫어요</p>
+                    <p className="me-1">싫어요</p><p>{post.unlike?.count || 0}</p>
                   </div>
                 </button>
               </div>
@@ -109,19 +114,22 @@ const PostDetail = ({postId}) => {
                     word="삭제하기"
                     type="button"
                     onClick={onClickDeleteButton}
-                    className="me-1" />
+                    className="me-1"/>
                   <Button
                     word="수정하기"
                     type="button"
                     onClick={onClickEditButton}
-                    className="me-1" />
+                    className="me-1"/>
                 </div>
-                )}
+              )}
               <hr/>
             </div>
             <div className="mb-3 d-flex">
               {post.tag.map((tag, index) =>
-                <button key={index} className="me-2 btn btn-primary d-flex">
+                <button
+                  onClick={() => onTagClick(tag)}
+                  key={index}
+                  className="me-2 btn btn-primary d-flex">
                   <span>#{tag}</span>
                 </button>
               )}

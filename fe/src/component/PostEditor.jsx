@@ -21,9 +21,10 @@ const PostEditor = ({defaultPost, onSubmit}) => {
 
   useEffect(() => {
     if(tagString.length >= 20) setTagString(tagString.slice(0, 20));
-    if(/\s$/.test(tagString)) {
-      if(!post.tag.find(tag => tag === tagString)){
-        const updatedHashtags = [...post.tag, tagString];
+    if(/^\s/.test(tagString)) setTagString('');
+    else if(/\s$/.test(tagString)) {
+      if(!post.tag.find(tag => tag === tagString.trim())){
+        const updatedHashtags = [...post.tag, tagString.trim()];
         setPost({
           ...post,
           tag: updatedHashtags
@@ -36,11 +37,6 @@ const PostEditor = ({defaultPost, onSubmit}) => {
   useEffect(() => {
     setTagString('')
   }, [post.tag]);
-
-
-  useEffect(() => {
-    console.log(post);
-  }, [post]);
 
   const onSubmitPost = async () => {
     onSubmit(post);

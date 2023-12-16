@@ -29,4 +29,11 @@ public class PostUpdateRequest {
     public void update(Post post){
         post.update(title, content);
     }
+
+    public List<String> getTag() {
+        return tag.stream()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+    }
 }

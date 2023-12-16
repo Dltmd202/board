@@ -1,3 +1,11 @@
+
+# DB Schema
+
+### DDL
+
+[init.sql](./be/sql/init.sql)
+
+```sql
 create table user(
     id bigint auto_increment primary key,
     email varchar(255) unique not null,
@@ -61,3 +69,46 @@ create table post_view(
     constraint foreign key (post_id) references post (id),
     constraint foreign key (user_id) references user (id)
 );
+```
+
+### 스키마
+
+#### 1. 사용자(user):
+* 식별자(id)
+* 이메일(email)
+* 비밀번호(password)
+
+#### 2. 게시글(post): 
+* 식별자(id)
+* 제목(title)
+* 내용(content) 
+* 작성자_식별자(user_id)
+* 화면에_표시될_게시글_uuid (post_id)
+* 작성일시(created_at)
+
+#### 3. 댓글(comment):
+* 식별자(id)
+* 내용(content)
+* 작성자_식별자(user_id)
+* 게시글_식별자(post_id)
+* 삭제일시(deleted_at)
+* 작성일시(created_at)
+
+#### 4. 태그(tag):
+* 이름(name)
+
+#### 5. 게시글_태그_매핑_테이블 (post_tag):
+* 게시글_식별자(post_id)
+* 태그_이름(tag_id)
+
+#### 6. 선호도_좋아요_또는_싫어요 (preference):
+* 식별자(id)
+* 사용자_식별자(user_id)
+* 게시글_식별자(post_id)
+* 선호도_좋아요_또는_싫어요(type)
+* 삭제일시(deleted_at)
+
+#### 7. 게시글_조회(post_view):
+* 게시글_식별자(post_id)
+* 사용자_식별자(user_id)
+* 조회일시(created_at)

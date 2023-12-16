@@ -34,7 +34,7 @@ const Comment = ({postId}) => {
 
   const onMoreCommentButtonClick = async () => {
     const excessCount = comments.length % 5;
-    if (excessCount > 0) {
+    if (comments.length === 0 || excessCount > 0) {
       await getComments(page, excessCount);
     } else {
       await getComments(page + 1);

@@ -22,7 +22,7 @@ class UserTest {
                 .build();
 
         // when
-        user.encryptPassword(passwordEncoder);
+        user.signup(passwordEncoder);
 
         // then
         assertThat(user.getPassword()).isNotEqualTo("1234");
@@ -37,7 +37,7 @@ class UserTest {
                 .password("1234")
                 .build();
 
-        user.encryptPassword(passwordEncoder);
+        user.signup(passwordEncoder);
 
         // when
         // then
@@ -53,7 +53,7 @@ class UserTest {
                 .password("1234")
                 .build();
 
-        user.encryptPassword(passwordEncoder);
+        user.signup(passwordEncoder);
 
         // when
         // then

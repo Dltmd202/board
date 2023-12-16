@@ -1,6 +1,5 @@
 package com.nts.seonghwan.be.user.service;
 
-import com.nts.seonghwan.be.common.error.exception.BusinessException;
 import com.nts.seonghwan.be.user.dto.*;
 import com.nts.seonghwan.be.user.entities.User;
 import com.nts.seonghwan.be.user.exception.DuplicatedEmailException;
@@ -24,7 +23,7 @@ public class UserService {
         validateDuplicatedEmail(signupRequest.getEmail());
 
         User user = signupRequest.toEntity();
-        user.encryptPassword(passwordEncoder);
+        user.signup(passwordEncoder);
         User save = userRepository.save(user);
         return SignupResponse.toResponse(save);
     }
@@ -36,7 +35,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public SigninResponse login(SigninRequest signinRequest) {
-        User user = getUserByEmail(signinRequest.getEmail(), new InvalidAuthenticationException());
+        User user = getAuthenticator(signinRequest.getEmail());
         user.login(passwordEncoder, signinRequest.getPassword(), new InvalidAuthenticationException());
 
         return SigninResponse.from(user);
@@ -58,9 +57,9 @@ public class UserService {
             throw new DuplicatedEmailException();
     }
 
-    private User getUserByEmail(String email, BusinessException exception) {
+    private User getAuthenticator(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> exception);
+                .orElseThrow(InvalidAuthenticationException::new);
     }
 
     private User getUserById(Long userId) {

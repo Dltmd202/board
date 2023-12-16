@@ -19,7 +19,7 @@ public class PostDetailResponse {
     private List<String> tag;
     private Long viewCount;
     private PreferenceDto like;
-    private PreferenceDto dislike;
+    private PreferenceDto unlike;
     private boolean isOwner;
 
 
@@ -32,7 +32,7 @@ public class PostDetailResponse {
         this.tag = post.getTag();
         this.viewCount = viewCount;
         this.like = like;
-        this.dislike = dislike;
+        this.unlike = dislike;
         this.isOwner = post.getUser().getId().equals(user.getId());
     }
 }

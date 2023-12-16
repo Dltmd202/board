@@ -31,10 +31,11 @@ const Login = () => {
     try {
       const { data } = await userApi.signin(signin);
       localStorage.setItem("TOKEN", data.response.sessionId);
+      localStorage.setItem("NAME", data.response.email);
       alert('로그인에 성공햇습니다.');
       navigate('/');
     } catch (e){
-      alert(e.data.error.message);
+      alert(e.response.data.error.message);
       setSignin({
         email: '',
         password: '',

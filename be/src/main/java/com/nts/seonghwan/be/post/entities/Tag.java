@@ -1,4 +1,4 @@
-package com.nts.seonghwan.be.tag.entities;
+package com.nts.seonghwan.be.post.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
