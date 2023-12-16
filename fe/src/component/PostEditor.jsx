@@ -24,7 +24,7 @@ const PostEditor = ({defaultPost, onSubmit}) => {
     if(/^\s/.test(tagString)) setTagString('');
     else if(/\s$/.test(tagString)) {
       if(!post.tag.find(tag => tag === tagString)){
-        const updatedHashtags = [...post.tag, tagString];
+        const updatedHashtags = [...post.tag, tagString.trim()];
         setPost({
           ...post,
           tag: updatedHashtags
