@@ -2,6 +2,7 @@ package com.nts.seonghwan.be.post.repository;
 
 import com.nts.seonghwan.be.post.dto.PostListResponseElement;
 import com.nts.seonghwan.be.post.dto.PostSearch;
+import com.nts.seonghwan.be.preference.entities.PreferenceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +22,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         "p.postId, p.title, p.user.email, p.createdAt, " +
                         "(select count(*) from PostView pv where pv.post = p), " +
                         "(select count(*) from Comment c where c.post = p and c.deletedAt is null), " +
-                        "(select count(*) from Preference pr where pr.post = p and pr.type = 'LIKE') " +
+                        "(select count(*) from Preference pr where pr.post.postId = p.postId and pr.type = :like and pr.deletedAt is null) " +
                     ") " +
                     "from Post p ";
 
@@ -42,6 +43,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         if(postSearch.getContent() != null) query.setParameter("content", postSearch.getContent());
         if(postSearch.getTag() != null) query.setParameter("tag", postSearch.getTag());
 
+        query.setParameter("like", PreferenceType.LIKE);
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
         query.setMaxResults(pageable.getPageSize());
         return new PageImpl<>(query.getResultList(), pageable, getTotalCount());

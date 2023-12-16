@@ -70,7 +70,7 @@ public class PostService {
 
         Long viewCount = postViewRepository.countByPostPostId(postId);
         PreferenceDto like = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
-        PreferenceDto unlike = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.LIKE);
+        PreferenceDto unlike = preferenceRepository.findPreferenceDtoByPostIdAndUserId(post, user, PreferenceType.UNLIKE);
 
         return new PostDetailResponse(post, viewCount, like, unlike, user);
     }
