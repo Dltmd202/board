@@ -35,7 +35,7 @@ const Login = () => {
       alert('로그인에 성공햇습니다.');
       navigate('/');
     } catch (e){
-      alert(e.data.error.message);
+      alert(e.response.data.error.message);
       setSignin({
         email: '',
         password: '',
