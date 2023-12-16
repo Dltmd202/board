@@ -22,3 +22,8 @@ docker-compose up -d
 ```shell
 http://localhost
 ```
+
+### [DB 스키마](./DB_Schema.md)
+
+#### [ERD 페이지](https://dbdiagram.io/d/6572df2356d8064ca0a3ad9c)
+![img.png](./resource/img.png)
