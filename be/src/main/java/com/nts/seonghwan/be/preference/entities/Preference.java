@@ -32,10 +32,6 @@ public class Preference {
     @Column()
     private LocalDateTime deletedAt;
 
-    public boolean persistent(){
-        return this.id != null;
-    }
-
     public void toggle(){
         if(this.isDeleted()) this.restore();
         else this.delete();

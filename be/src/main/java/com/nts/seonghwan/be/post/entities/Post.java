@@ -3,7 +3,6 @@ package com.nts.seonghwan.be.post.entities;
 import com.nts.seonghwan.be.comment.entities.Comment;
 import com.nts.seonghwan.be.common.service.UUIDHolder;
 import com.nts.seonghwan.be.preference.entities.Preference;
-import com.nts.seonghwan.be.tag.entities.Tag;
 import com.nts.seonghwan.be.user.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -53,28 +53,33 @@ public class Post implements Serializable{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<PostTag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostView> views = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private final Set<PostView> views = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private final List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Preference> preferences = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private final List<Preference> preferences = new ArrayList<>();
 
     public void grantPostId(UUIDHolder uuidHolder){
         this.postId = uuidHolder.uuid();
     }
 
-    public void tag(List<PostTag> postTags){
+    public void tag(List<Tag> tags){
+        Set<PostTag> postTags = tags.stream()
+                .map(tag -> new PostTag(this, tag))
+                .collect(Collectors.toSet());
         Set<PostTag> difference = new HashSet<>(this.tags);
+
         postTags.forEach(difference::remove);
         this.tags.removeAll(difference);
         this.tags.addAll(postTags);
     }
 
-    public PostView view(User user){
-        return new PostView(this, user);
+    public void view(User user){
+        PostView postView = new PostView(this, user);
+        this.views.add(postView);
     }
 
     public void update(String title, String content){

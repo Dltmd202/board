@@ -1,7 +1,6 @@
 package com.nts.seonghwan.be.post.entities;
 
 import com.nts.seonghwan.be.post.entities.id.PostTagId;
-import com.nts.seonghwan.be.tag.entities.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
